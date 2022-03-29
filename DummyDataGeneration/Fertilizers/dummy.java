@@ -11,11 +11,11 @@ import com.opencsv.CSVWriter;
 class FertilizersGenerator {
     public static void main(String[] args) throws IOException {
         ArrayList<String> data = new ArrayList<String>() ;
-        File file = new File("./fertilizers.csv");
+        File file = new File("./DummyDataGeneration/Fertilizers/fertilizers.csv");
         FileWriter outputfile = new FileWriter(file);
         CSVWriter writer = new CSVWriter(outputfile);
 
-        FileReader fr = new FileReader("FertilizersList.txt");
+        FileReader fr = new FileReader("./DummyDataGeneration/Fertilizers/FertilizersList.txt");
         Scanner inFile = new Scanner(fr);
         while (inFile.hasNext())
         {
@@ -37,7 +37,7 @@ class FertilizersGenerator {
     {
         Random rand = new Random();
         List<String[]> newList = new ArrayList<>();
-        newList.add(new String[] {"_id", "name", "unitType"});
+        // newList.add(new String[] {"_id", "name", "unitType"});
         for (int i = 0; i < totalItems; i++) {
             int randomIndex = rand.nextInt(list.size());
             String[] newString = new String[] { (i+1) + "", list.get(randomIndex) + "" , "pack"};
