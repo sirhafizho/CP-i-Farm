@@ -1,7 +1,5 @@
 {
     "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "Dummy Data Generation/Fertilizers/opencsv-5.6.jar",
-        "c:\\Users\\Muhammad Hafiz\\OneDrive\\UM\\Sem 6\\WIF3003 Concurrent Programming\\Fertilizers\\opencsv-5.6.jar"
+        "lib/**/*.jar"
     ]
 }
