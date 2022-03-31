@@ -1,11 +1,11 @@
-public class Farmer implements Runnable{
+public class Farmer implements Runnable {
     private String id;
     private String name;
     private String email;
     private String pwd;
     private String phoneNumber;
 
-    Farmer(String id, String name, String email, String pwd, String phoneNumber){
+    Farmer(String id, String name, String email, String pwd, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -45,7 +45,8 @@ public class Farmer implements Runnable{
         this.phoneNumber = phoneNumber;
     }
 
-    public void run(){
+    @Override
+    public void run() {
         //implement activity class here
         String action = "Sowing";
         String date = "2022-03-30";
@@ -58,7 +59,4 @@ public class Farmer implements Runnable{
             System.out.println(action + " " + type + " " + field + " " + row + " " + unit + " " + date);
         }
     }
-
-    
-    
 }
