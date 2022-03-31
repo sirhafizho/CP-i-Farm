@@ -1,24 +1,24 @@
 public class Farmer implements Runnable {
-    private String id;
+    private String _id;
     private String name;
     private String email;
-    private String pwd;
+    private String password;
     private String phoneNumber;
 
-    Farmer(String id, String name, String email, String pwd, String phoneNumber) {
-        this.id = id;
+    Farmer(String id, String name, String email, String password, String phoneNumber) {
+        this._id = id;
         this.name = name;
         this.email = email;
-        this.pwd= pwd;
+        this.password= password;
         this.phoneNumber = phoneNumber;
     }
 
     public String getId() {
-        return id;
+        return _id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this._id = id;
     }
 
     public String getName() {
