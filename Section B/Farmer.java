@@ -55,7 +55,7 @@ public class Farmer implements Runnable {
         String field = "Field 1";
         String row = "Row 1";
 
-        for(int i=0; i< 1000; i++){
+        for(int i=0; i< 1000; i++) {
             System.out.println(action + " " + type + " " + field + " " + row + " " + unit + " " + date);
         }
     }
