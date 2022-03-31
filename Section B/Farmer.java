@@ -2,6 +2,7 @@ public class Farmer implements Runnable {
     private String _id;
     private String name;
     private String email;
+    // TODO: Determine what to do with the password variable
     private String password;
     private String phoneNumber;
 
@@ -47,7 +48,7 @@ public class Farmer implements Runnable {
 
     @Override
     public void run() {
-        //implement activity class here
+        // TODO: Implement activity class here
         String action = "Sowing";
         String date = "2022-03-30";
         String type = "Fennel Seed";
