@@ -8,7 +8,7 @@ import java.util.Random;
 import java.io.FileWriter;
 import com.opencsv.CSVWriter;
 
-class FertilizersGenerator {
+public class FertilizersGenerator {
     public static void main(String[] args) throws IOException {
         ArrayList<String> data = new ArrayList<String>() ;
         File file = new File("./DummyDataGeneration/Fertilizers/fertilizers.csv");
