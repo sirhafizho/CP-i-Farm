@@ -14,11 +14,11 @@ import java.io.FileWriter;
 public class PlantGenerator {
     public static void main(String[] args) throws IOException {
         ArrayList<String> data = new ArrayList<String>() ;
-        File file = new File("./plants.csv");
+        File file = new File("./DummyDataGeneration/Plants/plants.csv");
         FileWriter outputfile = new FileWriter(file);
         CSVWriter writer = new CSVWriter(outputfile);
 
-        FileReader fr = new FileReader("PlantList.txt");
+        FileReader fr = new FileReader("./DummyDataGeneration/Plants/PlantList.txt");
         Scanner inFile = new Scanner(fr);
         while (inFile.hasNext())
         {
@@ -39,7 +39,7 @@ public class PlantGenerator {
     {
         Random rand = new Random();
         List<String[]> newList = new ArrayList<>();
-        newList.add(new String[] {"id", "name", "unitType"});
+        // newList.add(new String[] {"id", "name", "unitType"});
         for (int i = 0; i < totalItems; i++) {
             int randomIndex = rand.nextInt(list.size());
             String[] newString = new String[] { (i+1) + "", list.get(randomIndex) + "" , "mass"};
