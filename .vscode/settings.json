@@ -3,6 +3,8 @@
         "lib/**/*.jar"
     ],
     "java.project.sourcePaths": [
-        "Section B"
+        "DummyDataGeneration/Pesticides",
+        "DummyDataGeneration/Fertilizers",
+        "DummyDataGeneration/Plants"
     ]
 }
