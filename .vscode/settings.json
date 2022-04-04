@@ -3,8 +3,9 @@
         "lib/**/*.jar"
     ],
     "java.project.sourcePaths": [
+        "DummyDataGeneration/Plants",
         "DummyDataGeneration/Pesticides",
         "DummyDataGeneration/Fertilizers",
-        "DummyDataGeneration/Plants"
+        "db"
     ]
 }
