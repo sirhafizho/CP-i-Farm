@@ -9,8 +9,9 @@ public class MysqlCon {
             Connection con = DriverManager.getConnection ("jdbc:mysql://localhost:3306/ifarm","farmer","farmer");   
             Statement stmt = con.createStatement();  
             ResultSet rs = stmt.executeQuery("select * from plants");  
-            while(rs.next())  
-            System.out.println(rs.getInt(1) + "  " + rs.getString(2) + "  " + rs.getString(3));  
+            while(rs.next()) {
+                System.out.println(rs.getInt(1) + "  " + rs.getString(2) + "  " + rs.getString(3));
+            }
             con.close();  
         } catch (Exception e) { 
             System.out.println(e);
