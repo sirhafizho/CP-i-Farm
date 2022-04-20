@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2022 at 01:33 PM
+-- Generation Time: Apr 20, 2022 at 02:14 AM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -20,6 +20,25 @@ SET time_zone = "+00:00";
 --
 -- Database: `ifarm`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `activities`
+--
+
+CREATE TABLE `activities` (
+  `_id` varchar(255) NOT NULL,
+  `date` date NOT NULL,
+  `action` varchar(100) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `unit` varchar(50) NOT NULL,
+  `quantity` int(50) NOT NULL,
+  `field` int(50) NOT NULL,
+  `row` int(50) NOT NULL,
+  `farmId` varchar(100) NOT NULL,
+  `userId` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -197,10 +216,10 @@ CREATE TABLE `pesticides` (
 --
 
 INSERT INTO `pesticides` (`_id`, `name`, `unitTyoe`) VALUES
-('1', 'name', 'unitType'),
-('10', 'Micro???Tech', 'mass'),
+('1', 'Pesticide B', 'mass'),
+('10', 'Pesticide C', 'mass'),
 ('100', 'Chlorophen', 'mass'),
-('11', 'Stake,', 'mass'),
+('11', 'Stake', 'mass'),
 ('12', 'Silvanol', 'mass'),
 ('13', 'Velsicol 1068', 'mass'),
 ('14', 'Gold', 'mass'),
@@ -232,7 +251,7 @@ INSERT INTO `pesticides` (`_id`, `name`, `unitTyoe`) VALUES
 ('38', 'Forchlor', 'mass'),
 ('39', 'Lasso', 'mass'),
 ('4', 'Vitavax', 'mass'),
-('40', 'gamma???HCH', 'mass'),
+('40', 'HCH', 'mass'),
 ('41', 'Gamallin', 'mass'),
 ('42', 'Polychloro camphene', 'mass'),
 ('43', 'Sinituho', 'mass'),
@@ -240,8 +259,8 @@ INSERT INTO `pesticides` (`_id`, `name`, `unitTyoe`) VALUES
 ('45', 'Shroud', 'mass'),
 ('46', 'Glazd penta and Block penta,', 'mass'),
 ('47', 'Alazine', 'mass'),
-('48', 'Penta Preservative Ready???to???Use', 'mass'),
-('49', 'Dow Pentachlorophenol DP???2,', 'mass'),
+('48', 'Penta Preservative', 'mass'),
+('49', 'Dow Pentachlorophenol', 'mass'),
 ('5', 'Attac', 'mass'),
 ('50', 'BEHP', 'mass'),
 ('51', 'Isotox', 'mass'),
@@ -252,7 +271,7 @@ INSERT INTO `pesticides` (`_id`, `name`, `unitTyoe`) VALUES
 ('56', 'Termided,', 'mass'),
 ('57', 'Dowicide 7', 'mass'),
 ('58', 'Novigam,', 'mass'),
-('59', 'Ortho???Klor', 'mass'),
+('59', 'Ortho', 'mass'),
 ('6', 'Nexit', 'mass'),
 ('60', 'Lindagam', 'mass'),
 ('61', 'Alanex', 'mass'),
@@ -268,29 +287,29 @@ INSERT INTO `pesticides` (`_id`, `name`, `unitTyoe`) VALUES
 ('70', 'Chlor Kil', 'mass'),
 ('71', 'Sicol', 'mass'),
 ('72', 'Phenacide', 'mass'),
-('73', 'a plasticizer,', 'mass'),
+('73', 'Plasticizer', 'mass'),
 ('74', 'Antimicrobial', 'mass'),
 ('75', 'Octachlor', 'mass'),
-('76', 'Kill???Ko', 'mass'),
+('76', 'Pesticide E', 'mass'),
 ('77', 'DCP', 'mass'),
-('78', 'Dowicide EC???7', 'mass'),
-('79', 'Lacco Hi Lin,', 'mass'),
+('78', 'Dowicide EC', 'mass'),
+('79', 'Lacco Hi Lin', 'mass'),
 ('8', 'Chlon,', 'mass'),
-('80', 'Aspon???chlordate', 'mass'),
+('80', 'Aspon Chlordate', 'mass'),
 ('81', 'DMP', 'mass'),
 ('82', 'Termide', 'mass'),
 ('83', 'Pillarzo', 'mass'),
 ('84', 'Belt', 'mass'),
 ('85', 'Octoil', 'mass'),
-('86', 'Alatox???480', 'mass'),
-('87', 'Marksman,', 'mass'),
+('86', 'Alatox', 'mass'),
+('87', 'Marksman', 'mass'),
 ('88', 'Motox', 'mass'),
 ('89', 'DEP', 'mass'),
 ('9', 'DEHP', 'mass'),
 ('90', 'Penta Plus 40', 'mass'),
 ('91', 'BHC', 'mass'),
 ('92', 'Gamaphex', 'mass'),
-('93', 'Perchlorobenzene;', 'mass'),
+('93', 'Perchlorobenzene', 'mass'),
 ('94', 'Lindafor', 'mass'),
 ('95', 'Pentacon', 'mass'),
 ('96', 'Freedom', 'mass'),
