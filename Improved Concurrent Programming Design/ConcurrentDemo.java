@@ -6,10 +6,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.*;
 
 class ConcurrentDemo extends Thread {
-//    static CopyOnWriteArrayList l = 
-//                     new CopyOnWriteArrayList();
-    static ArrayList l = 
-                     new ArrayList();
+    static CopyOnWriteArrayList l = 
+                     new CopyOnWriteArrayList();
+    
+    //will throw exception error if use arraylist
+    //static ArrayList l = 
+    //                 new ArrayList();
+    
     public void run()
     {
         try {
