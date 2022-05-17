@@ -1,6 +1,4 @@
 
-package farmstimulation;
-
 import java.sql.*;
 
 
