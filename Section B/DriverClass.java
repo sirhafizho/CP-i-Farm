@@ -18,7 +18,18 @@ public class DriverClass {
 
         FarmerSimulator simulator = new FarmerSimulator();
 
-        simulator.generateFarmers(4);
+        Farmer[] farmers = simulator.generateFarmers(4);
+
+        // TODO: Sequential activity generation here
+        for (Farmer farmer : farmers) {
+            /*
+                Idea to create a sequential activity generation class which takes
+                farmer object as a parameter in its constructor and generates the 
+                activities for each farm
+            */
+            SequentialActivity activity = new SequentialActivity(farmer);
+            
+        }
 
 
     }
