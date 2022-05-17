@@ -5,5 +5,17 @@ public class DriverClass {
         Thread t1 = new Thread(farmer, "t1");
 
         t1.start();
+
+        // Establish the DB connection
+        // MysqlCon con = new MysqlCon();
+
+        // Farmer f = new Farmer(con.conn(), "1");
+        // Thread t = new Thread(f);
+        // t.start();
+
+        // // Close DB connection
+        // con.closeConn();
+
+
     }
 }
