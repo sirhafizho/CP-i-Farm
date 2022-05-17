@@ -1,10 +1,10 @@
 public class DriverClass {
     public static void main(String[] args) {
-        Runnable farmer = new Farmer("1", "ABCD", "abcd@example.com", "abcd12345", "012-3456789", new String[0]);
+        // Runnable farmer = new Farmer("1", "ABCD", "abcd@example.com", "abcd12345", "012-3456789", new String[0]);
 
-        Thread t1 = new Thread(farmer, "t1");
+        // Thread t1 = new Thread(farmer, "t1");
 
-        t1.start();
+        // t1.start();
 
         // Establish the DB connection
         // MysqlCon con = new MysqlCon();
@@ -15,6 +15,10 @@ public class DriverClass {
 
         // // Close DB connection
         // con.closeConn();
+
+        FarmerSimulator simulator = new FarmerSimulator();
+
+        simulator.generateFarmers(4);
 
 
     }
