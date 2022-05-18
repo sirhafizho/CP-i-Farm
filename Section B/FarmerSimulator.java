@@ -2,8 +2,14 @@
     This class is responsible for Farmer generation and Farmer simulation
 */
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
@@ -87,6 +93,26 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             System.out.println("Creating new Activities table...");
             stmt.executeUpdate(createSQL);
             System.out.println("Activities table created..." + "\n");
+
+            // delete sequential activity log if already exists
+            try{
+                Path fileToDeletePath = Paths.get("Sequential Activity Log.txt");
+                File file = new File("Sequential Activity Log.txt");
+                if(file.exists()){
+                    Files.delete(fileToDeletePath);
+                }
+            }catch (IOException e){
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+
+            // create new sequential activity log
+            try {
+                FileWriter myWriter = new FileWriter("Sequential Activity Log.txt");
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
             
             // preparing the insert query to insert farmer into database
             PreparedStatement pstmt = mysqlCon.getCon().prepareStatement(preparedSQL);      
@@ -203,6 +229,16 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             // to get random number of activities
             int numOfActivity = 1 + random.nextInt(12);
             System.out.println("Farmer " + farmer.getId() + " generates " + numOfActivity + " activities of random types for Farm " + farm);
+
+            // Write the farmers’ sent operations and success operations into log file
+            try {
+                FileWriter myWriter = new FileWriter("Sequential Activity Log.txt", true);
+                myWriter.write("Farmer " + farmer.getId() + " generates " + numOfActivity + " activities of random types for Farm " + farm + "\n");
+                myWriter.close();
+              } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+              }
 
             // to generate random activities
             for(int i=0; i<numOfActivity; i++){

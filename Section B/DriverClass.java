@@ -8,7 +8,7 @@ public class DriverClass {
 
         FarmerSimulator simulator = new FarmerSimulator();
 
-        Farmer[] farmers = simulator.generateFarmers(4);
+        Farmer[] farmers = simulator.generateFarmers(2);
 
         // start timer
         Timer timer = new Timer();
