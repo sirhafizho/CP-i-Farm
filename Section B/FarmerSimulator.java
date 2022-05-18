@@ -11,6 +11,9 @@ import java.util.Scanner;
 import java.sql.*;
 
 public class FarmerSimulator implements FarmerSimulatorInterface {
+
+    static int activityID = 1;
+
     // This method generates a number of farmers
     @Override
     public Farmer[] generateFarmers(int numberOfFarmers)
@@ -137,9 +140,13 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         // TODO: Sequential activity generation
 
         System.out.println("Farmer " + farmer.getId() + "; Farms " + Arrays.toString(farmer.getFarms()));
-
+        
         for (String farms : farmer.getFarms()) {
             // generate activities for each farms
+            for(int i=0; i<10; i++){
+                System.out.println(activityID);
+                activityID++;
+            }
         }
     }
 }
