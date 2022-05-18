@@ -9,6 +9,10 @@ public class DriverClass {
 
         Farmer[] farmers = simulator.generateFarmers(4);
 
+        // start timer
+        Timer timer = new Timer();
+        timer.startTime();
+
         // // TODO: Sequential activity generation here
         for (Farmer farmer : farmers) {
             /*
@@ -18,5 +22,8 @@ public class DriverClass {
             simulator.sequentialActivityGenerate(farmer);
         }
 
+        // stop timer and print time taken for sequential approach
+        timer.endTime();
+        System.out.println("Time taken for dummy farmers' simulation using sequential approach: " + timer.timeTaken() + "ns");
     }
 }
