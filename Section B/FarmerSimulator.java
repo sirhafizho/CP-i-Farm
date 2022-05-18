@@ -39,7 +39,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         String preparedSQL = "INSERT INTO Users(_id, name, email, password, phoneNumber, farms) "+ "VALUES(?,?,?,?,?,?)";
 
         try {
-            //checking if table already exists and dropping it if it does
+            //checking if Users table already exists and dropping it if it does
             DatabaseMetaData meta = mysqlCon.getCon().getMetaData();
             ResultSet resultSet = meta.getTables(null, null, "Users",  new String[] {"TABLE"});
             if(resultSet.next()){
@@ -61,6 +61,32 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             System.out.println("Creating new Users table...");
             stmt.executeUpdate(createSQL);
             System.out.println("Users table created...");
+
+            //checking if Activities table already exists and dropping it if it does
+            resultSet = meta.getTables(null, null, "Activities",  new String[] {"TABLE"});
+            if(resultSet.next()){
+                System.out.println("Activities table already exists...");
+                String dropSQL = "DROP TABLE Activities";
+                stmt.executeUpdate(dropSQL);
+                System.out.println("Activities table dropped");
+            }
+
+            //creating a new Activities table
+            createSQL = "CREATE TABLE Activities " +
+                   "(_id VARCHAR(255) not NULL, " +
+                   " date date NOT NULL, " + 
+                   " action varchar(100) NOT NULL, " + 
+                   " type varchar(100) NOT NULL, " +
+                   " unit varchar(50) NOT NULL, " + 
+                   " quantity int(50) NOT NULL, " +
+                   " field int(50) NOT NULL, " +
+                   " row int(50) NOT NULL, " +
+                   " farmId varchar(100) NOT NULL, " +
+                   " userId varchar(100) NOT NULL, " +
+                   " PRIMARY KEY ( _id ))";
+            System.out.println("Creating new Activities table...");
+            stmt.executeUpdate(createSQL);
+            System.out.println("Activities table created..." + "\n");
             
             // preparing the insert query to insert farmer into database
             PreparedStatement pstmt = mysqlCon.getCon().prepareStatement(preparedSQL);      
@@ -153,7 +179,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     //This method simulates the sequential activity generation
     public void sequentialActivityGenerate(Farmer farmer){
 
-        System.out.println("Farmer " + farmer.getId() + ": Farms " + Arrays.toString(farmer.getFarms()));
+        System.out.println("\nFarmer " + farmer.getId() + ": Farms " + Arrays.toString(farmer.getFarms()));
         
         for(String farm : farmer.getFarms()){
 

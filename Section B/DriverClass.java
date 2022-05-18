@@ -1,6 +1,7 @@
 import java.time.Instant;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class DriverClass {
     public static void main(String[] args) {
@@ -24,6 +25,6 @@ public class DriverClass {
 
         // stop timer and print time taken for sequential approach
         timer.endTime();
-        System.out.println("Time taken for dummy farmers' simulation using sequential approach: " + timer.timeTaken() + "ns");
+        System.out.println("\nTime taken for dummy farmers' simulation using sequential approach: " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)");
     }
 }
