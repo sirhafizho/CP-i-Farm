@@ -11,8 +11,7 @@ public class Activity {
     private Integer userId;
 
     
-    public Activity(String _id, String date, String action, String type, String unit, Integer quantity, Integer field,
-            Integer row, Integer farmId, Integer userId) {
+    public Activity(String _id, String date, String action, String type, String unit, Integer quantity, Integer field, Integer row, Integer farmId, Integer userId) {
         this._id = _id;
         this.date = date;
         this.action = action;
@@ -24,6 +23,4 @@ public class Activity {
         this.farmId = farmId;
         this.userId = userId;
     }
-
-
 }
