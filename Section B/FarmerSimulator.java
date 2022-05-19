@@ -37,6 +37,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
 
         // Prepare variables required for the generation of the details of the farmers
         Farmer[] farmers = new Farmer[numberOfFarmers];
+        
         final int PASSWORD_LENGTH = 8;
         String alphanumericCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
         final int MAX_FARM_NUMBER = 5;
@@ -178,6 +179,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
 
                 System.out.println("Adding farmer "+id);
                 pstmt.executeUpdate();
+                
                 farmers[i] = new Farmer(id, name, email, password, phoneNumber, farms);
             }
 
@@ -200,6 +202,39 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         String day = formatter.format(1 + random.nextInt(28));
         String date = "20" + year + "-" + month + "-" + day;
         return date;
+    }
+
+    public String getKgUnit(int val){
+        switch (val) {
+            case 0:
+                return "kg";
+            case 1:
+                return "g";
+            default:
+                return "";
+        }
+    }
+
+    public String getVolumeUnit(int val){
+        switch (val) {
+            case 0:
+                return "l";
+            case 1:
+                return "ml";
+            default:
+                return "";
+        }
+    }
+
+    public String getPackUnit(int val){
+        switch (val) {
+            case 0:
+                return "pack (500g)";
+            case 1:
+                return "pack (1000g)";
+            default:
+                return "";
+        }
     }
 
     //This method simulates the sequential activity generation
@@ -247,13 +282,20 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                 int act = 1 + random.nextInt(5);
                 String action = "";
                 String type = "";
-                String unit = "kg";
-                int quantity = 1 + random.nextInt(10);
+                String unit = "";
+                int quantity = 0;
                 int field = 1 + random.nextInt(10);
                 int row = 1 + random.nextInt(10);
 
                 if(act == 1) {
                     action = "sowing";
+                    unit = getKgUnit(random.nextInt(2));
+                    if(unit == "kg"){
+                        //kg max value set to 15
+                        quantity = 1+random.nextInt(15);
+                    } else{
+                        quantity = 1+random.nextInt(750);
+                    }
       	            String plantId = plants[random.nextInt(plants.length)];
                     try {  
                         ResultSet rs = stmt.executeQuery("select * from plants where _id =" + plantId);  
@@ -265,6 +307,13 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                     }
                 } else if(act == 2) {
                     action = "harvest";
+                    unit = getKgUnit(random.nextInt(2));
+                    if(unit == "kg"){
+                        //kg max value set to 15
+                        quantity = 1+random.nextInt(15);
+                    } else{
+                        quantity = 1+random.nextInt(750);
+                    }
                     String plantId = plants[random.nextInt(plants.length)];
                     try {  
                         ResultSet rs = stmt.executeQuery("select * from plants where _id =" + plantId);  
@@ -276,6 +325,13 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                     }
                 } else if(act == 3) {
                     action = "pesticide";
+                    unit = getVolumeUnit(random.nextInt(2));
+                    if(unit == "l"){
+                        //l max value set to 15
+                        quantity = 1+random.nextInt(15);
+                    } else{
+                        quantity = 1+random.nextInt(2500);
+                    }
                     String pesticideId = pesticides[random.nextInt(pesticides.length)];
                     try {  
                         ResultSet rs = stmt.executeQuery("select * from pesticides where _id =" + pesticideId);  
@@ -287,6 +343,13 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                     }
                 } else if(act == 4) {
                     action = "fertilizer";
+                    unit = getPackUnit(random.nextInt(2));
+                    if(unit == "pack (500g)"){
+                        //pack max value set to 5
+                        quantity = 1+random.nextInt(10);
+                    } else{
+                        quantity = 1+random.nextInt(5);
+                    }
                     String fertilizerId = fertilizers[random.nextInt(fertilizers.length)];
                     try {  
                         ResultSet rs = stmt.executeQuery("select * from fertilizers where _id =" + fertilizerId);  
@@ -298,6 +361,13 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                     }
                 } else {
                     action = "sales";
+                    unit = getKgUnit(random.nextInt(2));
+                    if(unit == "kg"){
+                        //kg max value set to 15
+                        quantity = 1+random.nextInt(15);
+                    } else{
+                        quantity = 1+random.nextInt(750);
+                    }
                     String plantId = plants[random.nextInt(plants.length)];
                     try {  
                         ResultSet rs = stmt.executeQuery("select * from plants where _id =" + plantId);  
