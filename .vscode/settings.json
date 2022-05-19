@@ -1,7 +1,13 @@
 {
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar"
-    ],
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar",
+            "c:\\Users\\User\\Documents\\jars\\mysql-connector-java-8.0.28\\mysql-connector-java-8.0.28.jar"
+        ],
+        "exclude": [
+            "lib/mysql-connector-java-8.0.28.jar"
+        ]
+    },
     "java.project.sourcePaths": [
         "db",
         "DummyDataGeneration/Plants",
