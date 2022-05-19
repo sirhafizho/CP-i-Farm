@@ -2,8 +2,14 @@
     This class is responsible for Farmer generation and Farmer simulation
 */
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
@@ -39,7 +45,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         String preparedSQL = "INSERT INTO Users(_id, name, email, password, phoneNumber, farms) "+ "VALUES(?,?,?,?,?,?)";
 
         try {
-            //checking if table already exists and dropping it if it does
+            //checking if Users table already exists and dropping it if it does
             DatabaseMetaData meta = mysqlCon.getCon().getMetaData();
             ResultSet resultSet = meta.getTables(null, null, "Users",  new String[] {"TABLE"});
             if(resultSet.next()){
@@ -61,6 +67,52 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             System.out.println("Creating new Users table...");
             stmt.executeUpdate(createSQL);
             System.out.println("Users table created...");
+
+            //checking if Activities table already exists and dropping it if it does
+            resultSet = meta.getTables(null, null, "Activities",  new String[] {"TABLE"});
+            if(resultSet.next()){
+                System.out.println("Activities table already exists...");
+                String dropSQL = "DROP TABLE Activities";
+                stmt.executeUpdate(dropSQL);
+                System.out.println("Activities table dropped");
+            }
+
+            //creating a new Activities table
+            createSQL = "CREATE TABLE Activities " +
+                   "(_id VARCHAR(255) not NULL, " +
+                   " date date NOT NULL, " + 
+                   " action varchar(100) NOT NULL, " + 
+                   " type varchar(100) NOT NULL, " +
+                   " unit varchar(50) NOT NULL, " + 
+                   " quantity int(50) NOT NULL, " +
+                   " field int(50) NOT NULL, " +
+                   " row int(50) NOT NULL, " +
+                   " farmId varchar(100) NOT NULL, " +
+                   " userId varchar(100) NOT NULL, " +
+                   " PRIMARY KEY ( _id ))";
+            System.out.println("Creating new Activities table...");
+            stmt.executeUpdate(createSQL);
+            System.out.println("Activities table created..." + "\n");
+
+            // delete sequential activity log if already exists
+            try{
+                Path fileToDeletePath = Paths.get("Sequential Activity Log.txt");
+                File file = new File("Sequential Activity Log.txt");
+                if(file.exists()){
+                    Files.delete(fileToDeletePath);
+                }
+            }catch (IOException e){
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+
+            // create new sequential activity log
+            try {
+                FileWriter myWriter = new FileWriter("Sequential Activity Log.txt");
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
             
             // preparing the insert query to insert farmer into database
             PreparedStatement pstmt = mysqlCon.getCon().prepareStatement(preparedSQL);      
@@ -153,7 +205,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     //This method simulates the sequential activity generation
     public void sequentialActivityGenerate(Farmer farmer){
 
-        System.out.println("Farmer " + farmer.getId() + ": Farms " + Arrays.toString(farmer.getFarms()));
+        System.out.println("\nFarmer " + farmer.getId() + ": Farms " + Arrays.toString(farmer.getFarms()));
         
         for(String farm : farmer.getFarms()){
 
@@ -177,6 +229,16 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             // to get random number of activities
             int numOfActivity = 1 + random.nextInt(12);
             System.out.println("Farmer " + farmer.getId() + " generates " + numOfActivity + " activities of random types for Farm " + farm);
+
+            // Write the farmers’ sent operations and success operations into log file
+            try {
+                FileWriter myWriter = new FileWriter("Sequential Activity Log.txt", true);
+                myWriter.write("Farmer " + farmer.getId() + " generates " + numOfActivity + " activities of random types for Farm " + farm + "\n");
+                myWriter.close();
+              } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+              }
 
             // to generate random activities
             for(int i=0; i<numOfActivity; i++){
