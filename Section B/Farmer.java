@@ -9,7 +9,7 @@ public class Farmer implements Runnable {
     private String[] farms;
 
     private Range _idRange;
-    private Activity[][] activities = new Activity[this.farms.length][];
+    private Activity[][] activities;
 
     Farmer(String _id, String name, String email, String password, String phoneNumber, String[] farms) {
         this._id = _id;
@@ -18,6 +18,8 @@ public class Farmer implements Runnable {
         this.password= password;
         this.phoneNumber = phoneNumber;
         this.farms = farms;
+
+        this.activities = new Activity[this.farms.length][];
     }
 
     public String getId() {
