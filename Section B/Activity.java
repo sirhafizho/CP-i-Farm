@@ -23,4 +23,44 @@ public class Activity {
         this.farmId = farmId;
         this.userId = userId;
     }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public String getDate() {
+        return date;
+    }
+    
+    public String getAction() {
+        return action;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Integer getField() {
+        return field;
+    }
+
+    public Integer getRow() {
+        return row;
+    }
+
+    public Integer getFarmId() {
+        return farmId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
 }
