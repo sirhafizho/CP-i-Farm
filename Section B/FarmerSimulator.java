@@ -374,7 +374,44 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             thread.join();
         }
 
-        // Stop the timer then display time it took for farmers to concurrently generate activities
+        // For each farmer
+        for(int i = 0; i < farmers.length; i++) {
+            // Get the activities that they have performed
+            Activity[][] activities = farmers[i].getActivities();
+
+            // For the activities of a farm
+            for(int j = 0; j < activities.length; j++) {
+                // For each of the activities
+                for(int k = 0; k < activities[j].length; k++) {
+                    try {
+                        // Prepare the insert query statement to insert activity into database then get the editable PreparedStatement
+                        String preparedSQL = "INSERT INTO activities(_id, date, action, type, unit, quantity, field, row, farmId, userId) "+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+                        PreparedStatement preparedStatement = this.mysqlCon.getCon().prepareStatement(preparedSQL);
+        
+                        // Insert the activity information into the PreparedStatement
+                        preparedStatement.setString(1, activities[i][k].get_id());
+                        preparedStatement.setString(2, activities[i][k].getDate());
+                        preparedStatement.setString(3, activities[i][k].getAction());
+                        preparedStatement.setString(4, activities[i][k].getType());
+                        preparedStatement.setString(5, activities[i][k].getUnit());
+                        preparedStatement.setInt(6, activities[i][k].getQuantity());
+                        preparedStatement.setInt(7, activities[i][k].getField());
+                        preparedStatement.setInt(8, activities[i][k].getRow());
+                        preparedStatement.setString(9, Integer.toString(activities[i][k].getFarmId()));
+                        preparedStatement.setString(10, Integer.toString(activities[i][k].getUserId()));
+        
+                        // Insert the activity into the database
+                        preparedStatement.executeUpdate();
+                    }
+                    catch(SQLException e) {
+                        // Print out error message to the terminal if any
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+        }
+
+        // Stop the timer then display time it took for farmers to concurrently generate activities and to write the activities to the database
         timer.endTime();
         System.out.println("Concurrent activity generation took " + timer.timeTaken() + "ns");
     }
