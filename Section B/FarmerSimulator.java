@@ -114,6 +114,26 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
             }
+
+            // delete concurrent activity log if already exists
+            try{
+                Path fileToDeletePath = Paths.get("Concurrent Activity Log.txt");
+                File file = new File("Concurrent Activity Log.txt");
+                if(file.exists()){
+                    Files.delete(fileToDeletePath);
+                }
+            }catch (IOException e){
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+
+            // create new concurrent activity log
+            try {
+                FileWriter myWriterC = new FileWriter("Concurrent Activity Log.txt");
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
             
             // preparing the insert query to insert farmer into database
             PreparedStatement pstmt = mysqlCon.getCon().prepareStatement(preparedSQL);      
