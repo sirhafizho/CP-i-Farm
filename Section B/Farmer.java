@@ -80,7 +80,7 @@ public class Farmer implements Runnable {
         for(int i = 0; i < farms.length; i++) {
             // Generate the activities performed by the farmer for the farm
             for(int j = 0; j <= activitiesPerFarm; j++) {
-                this.activities[i][j] = new Activity();
+                //this.activities[i][j] = new Activity();
             }
         }
     }
