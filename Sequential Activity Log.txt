@@ -1,9 +1,7 @@
-Farmer 1 generates 10 activities of random types for Farm 1
-Farmer 1 generates 5 activities of random types for Farm 2
-Farmer 1 generates 11 activities of random types for Farm 4
-Farmer 1 generates 12 activities of random types for Farm 5
-Farmer 2 generates 11 activities of random types for Farm 1
-Farmer 2 generates 1 activities of random types for Farm 3
-Farmer 2 generates 7 activities of random types for Farm 6
-Farmer 2 generates 3 activities of random types for Farm 7
-Farmer 2 generates 8 activities of random types for Farm 10
+Farmer 1 generates 6 activities of random types for Farm 2
+Farmer 1 generates 3 activities of random types for Farm 6
+Farmer 2 generates 1 activities of random types for Farm 2
+Farmer 2 generates 11 activities of random types for Farm 4
+Farmer 2 generates 1 activities of random types for Farm 5
+Farmer 2 generates 8 activities of random types for Farm 7
+Farmer 2 generates 10 activities of random types for Farm 8
