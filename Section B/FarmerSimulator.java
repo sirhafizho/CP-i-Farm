@@ -431,7 +431,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             // Set the _id range for the farmer
             farmers[i].setRange(range);
 
-            // Initiazlie a thread then start it
+            // Initialize a thread then start it
             threads[i] = new Thread(farmers[i]);
             threads[i].start();
 

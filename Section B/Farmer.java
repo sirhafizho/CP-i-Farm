@@ -1,4 +1,10 @@
 import java.util.Arrays;
+import java.util.Random;
+
+
+import java.sql.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class Farmer implements Runnable {
     private String _id;
@@ -10,6 +16,13 @@ public class Farmer implements Runnable {
 
     private Range _idRange;
     private Activity[][] activities;
+
+    // Initailize a convenient Random object
+    Random randomC = new Random();
+
+    //initializing the mysql connection class
+    MysqlCon mysqlCon = new MysqlCon();
+    Statement stmt = mysqlCon.conn();
 
     Farmer(String _id, String name, String email, String password, String phoneNumber, String[] farms) {
         this._id = _id;
@@ -70,6 +83,50 @@ public class Farmer implements Runnable {
         return this.activities;
     }
 
+
+    // This method generates random date
+    public String generateDate() {
+        NumberFormat formatter = new DecimalFormat("00");
+        String year = formatter.format(randomC.nextInt(22));
+        String month = formatter.format(1 + randomC.nextInt(12));
+        String day = formatter.format(1 + randomC.nextInt(28));
+        String date = "20" + year + "-" + month + "-" + day;
+        return date;
+    }
+
+    public String getKgUnit(int val){
+        switch (val) {
+            case 0:
+                return "kg";
+            case 1:
+                return "g";
+            default:
+                return "";
+        }
+    }
+
+    public String getVolumeUnit(int val){
+        switch (val) {
+            case 0:
+                return "l";
+            case 1:
+                return "ml";
+            default:
+                return "";
+        }
+    }
+
+    public String getPackUnit(int val){
+        switch (val) {
+            case 0:
+                return "pack (500g)";
+            case 1:
+                return "pack (1000g)";
+            default:
+                return "";
+        }
+    }
+
     // William, this is Irfan, please take note of the _idRange object and the activties 2d array when implementing your part
     @Override
     public void run() {
@@ -78,9 +135,126 @@ public class Farmer implements Runnable {
 
         // For each farm that the current farmer is employed by
         for(int i = 0; i < farms.length; i++) {
+            String[] plants = new String[0];
+            String[] fertilizers = new String[0];
+            String[] pesticides = new String[0];
+
+            // get the array of plants, pesticides and fertilizers of the farm
+            try {  
+                ResultSet rs = stmt.executeQuery("select * from farms where _id =" + farms[i]);  
+                while(rs.next()) {
+                    plants = rs.getString("plants").split(",");
+                    fertilizers = rs.getString("fertilizers").split(",");
+                    pesticides = rs.getString("pesticides").split(",");
+                }
+            } catch(SQLException e){
+                System.out.println(e.getMessage());
+            }
             // Generate the activities performed by the farmer for the farm
             for(int j = 0; j <= activitiesPerFarm; j++) {
-                //this.activities[i][j] = new Activity();
+                String date = generateDate();
+
+                int act = 1 + randomC.nextInt(5);
+                String action = "";
+                String type = "";
+                String unit = "";
+                int quantity = 0;
+                int field = 1 + randomC.nextInt(10);
+                int row = 1 + randomC.nextInt(10);
+
+                if(act == 1) {
+                    action = "sowing";
+                    unit = getKgUnit(randomC.nextInt(2));
+                    if(unit == "kg"){
+                        //kg max value set to 15
+                        quantity = 1+randomC.nextInt(15);
+                    } else{
+                        quantity = 1+randomC.nextInt(750);
+                    }
+      	            String plantId = plants[randomC.nextInt(plants.length)];
+                    try {  
+                        ResultSet rs = stmt.executeQuery("select * from plants where _id =" + plantId);  
+                        while(rs.next()) {
+                            type = rs.getString("name");
+                        }
+                    } catch(SQLException e){
+                        System.out.println(e.getMessage());
+                    }
+                } else if(act == 2) {
+                    action = "harvest";
+                    unit = getKgUnit(randomC.nextInt(2));
+                    if(unit == "kg"){
+                        //kg max value set to 15
+                        quantity = 1+randomC.nextInt(15);
+                    } else{
+                        quantity = 1+randomC.nextInt(750);
+                    }
+                    String plantId = plants[randomC.nextInt(plants.length)];
+                    try {  
+                        ResultSet rs = stmt.executeQuery("select * from plants where _id =" + plantId);  
+                        while(rs.next()) {
+                            type = rs.getString("name");
+                        }
+                    } catch(SQLException e){
+                        System.out.println(e.getMessage());
+                    }
+                } else if(act == 3) {
+                    action = "pesticide";
+                    unit = getVolumeUnit(randomC.nextInt(2));
+                    if(unit == "l"){
+                        //l max value set to 15
+                        quantity = 1+randomC.nextInt(15);
+                    } else{
+                        quantity = 1+randomC.nextInt(2500);
+                    }
+                    String pesticideId = pesticides[randomC.nextInt(pesticides.length)];
+                    try {  
+                        ResultSet rs = stmt.executeQuery("select * from pesticides where _id =" + pesticideId);  
+                        while(rs.next()) {
+                            type = rs.getString("name");
+                        }
+                    } catch(SQLException e){
+                        System.out.println(e.getMessage());
+                    }
+                } else if(act == 4) {
+                    action = "fertilizer";
+                    unit = getPackUnit(randomC.nextInt(2));
+                    if(unit == "pack (500g)"){
+                        //pack max value set to 5
+                        quantity = 1+randomC.nextInt(10);
+                    } else{
+                        quantity = 1+randomC.nextInt(5);
+                    }
+                    String fertilizerId = fertilizers[randomC.nextInt(fertilizers.length)];
+                    try {  
+                        ResultSet rs = stmt.executeQuery("select * from fertilizers where _id =" + fertilizerId);  
+                        while(rs.next()) {
+                            type = rs.getString("name");
+                        }
+                    } catch(SQLException e){
+                        System.out.println(e.getMessage());
+                    }
+                } else {
+                    action = "sales";
+                    unit = getKgUnit(randomC.nextInt(2));
+                    if(unit == "kg"){
+                        //kg max value set to 15
+                        quantity = 1+randomC.nextInt(15);
+                    } else{
+                        quantity = 1+randomC.nextInt(750);
+                    }
+                    String plantId = plants[randomC.nextInt(plants.length)];
+                    try {  
+                        ResultSet rs = stmt.executeQuery("select * from plants where _id =" + plantId);  
+                        while(rs.next()) {
+                            type = rs.getString("name");
+                        }
+                    } catch(SQLException e){
+                        System.out.println(e.getMessage());
+                    }
+                }
+                this.activities[i][j] = new Activity(Integer.toString(activity_id),date,action,type,unit,quantity,field,row,Integer.parseInt(farms[i]),Integer.parseInt(this._id));
+                activity_id++;
             }
         }
     }
