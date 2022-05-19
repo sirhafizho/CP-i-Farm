@@ -336,4 +336,83 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             }
         }
     }
+
+    public void concurrentActivityGeneration(Farmer[] farmers) throws InterruptedException {
+        // Initalize an array to hold all the threads
+        Thread[] threads = new Thread[farmers.length];
+
+        // Initalize a fixed value for the number of activities per farm
+        final int NUMBER_OF_ACTIVITIES_PER_FARM = 1000;
+
+        // Iniatlize a variable to keep track of the range of _id to pass to the farmers
+        Range range = new Range(1);
+
+        // Initalize then start the timer
+        Timer timer = new Timer();
+        timer.startTime();
+
+        for(int i = 0; i < farmers.length; i++) {
+            // Determine the number of activities that is going to be performed by the farmer
+            int expectedNumberOfActivites = farmers[i].getFarms().length * NUMBER_OF_ACTIVITIES_PER_FARM;
+
+            // Based on the number of activities that is going to be performed by the farmer, determine the upper limit of the range of _id for the farmer
+            range.setUpperLimit(range.getLowerLimit() - 1 + expectedNumberOfActivites);
+
+            // Set the _id range for the farmer
+            farmers[i].setRange(range);
+
+            // Initiazlie a thread then start it
+            threads[i] = new Thread(farmers[i]);
+            threads[i].start();
+
+            // Determine the lower limit of the next range
+            range.setLowerLimit(range.getLowerLimit() + expectedNumberOfActivites);
+        }
+
+        // Wait for all threads to complete the run
+        for(Thread thread : threads) {
+            thread.join();
+        }
+
+        // For each farmer
+        for(int i = 0; i < farmers.length; i++) {
+            // Get the activities that they have performed
+            Activity[][] activities = farmers[i].getActivities();
+
+            // For the activities of a farm
+            for(int j = 0; j < activities.length; j++) {
+                // For each of the activities
+                for(int k = 0; k < activities[j].length; k++) {
+                    try {
+                        // Prepare the insert query statement to insert activity into database then get the editable PreparedStatement
+                        String preparedSQL = "INSERT INTO activities(_id, date, action, type, unit, quantity, field, row, farmId, userId) "+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+                        PreparedStatement preparedStatement = this.mysqlCon.getCon().prepareStatement(preparedSQL);
+        
+                        // Insert the activity information into the PreparedStatement
+                        preparedStatement.setString(1, activities[i][k].get_id());
+                        preparedStatement.setString(2, activities[i][k].getDate());
+                        preparedStatement.setString(3, activities[i][k].getAction());
+                        preparedStatement.setString(4, activities[i][k].getType());
+                        preparedStatement.setString(5, activities[i][k].getUnit());
+                        preparedStatement.setInt(6, activities[i][k].getQuantity());
+                        preparedStatement.setInt(7, activities[i][k].getField());
+                        preparedStatement.setInt(8, activities[i][k].getRow());
+                        preparedStatement.setString(9, Integer.toString(activities[i][k].getFarmId()));
+                        preparedStatement.setString(10, Integer.toString(activities[i][k].getUserId()));
+        
+                        // Insert the activity into the database
+                        preparedStatement.executeUpdate();
+                    }
+                    catch(SQLException e) {
+                        // Print out error message to the terminal if any
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+        }
+
+        // Stop the timer then display time it took for farmers to concurrently generate activities and to write the activities to the database
+        timer.endTime();
+        System.out.println("Concurrent activity generation took " + timer.timeTaken() + "ns");
+    }
 }

@@ -1,11 +1,15 @@
+import java.util.Arrays;
+
 public class Farmer implements Runnable {
     private String _id;
     private String name;
     private String email;
-    // TODO: Determine what to do with the password property
     private String password;
     private String phoneNumber;
     private String[] farms;
+
+    private Range _idRange;
+    private Activity[][] activities = new Activity[this.farms.length][];
 
     Farmer(String _id, String name, String email, String password, String phoneNumber, String[] farms) {
         this._id = _id;
@@ -56,29 +60,31 @@ public class Farmer implements Runnable {
         this.farms = farms;
     }
 
+    public void setRange(Range range) {
+        this._idRange = range;
+    }
+
+    public Activity[][] getActivities() {
+        return this.activities;
+    }
+
+    // William, this is Irfan, please take note of the _idRange object and the activties 2d array when implementing your part
     @Override
     public void run() {
-        // TODO: Implement activity class here
-        String action = "Sowing";
-        String date = "2022-03-30";
-        String type = "Fennel Seed";
-        String unit = "kg";
-        String field = "Field 1";
-        String row = "Row 1";
+        int activitiesPerFarm = _idRange.getLimitDifference() / this.farms.length;
+        int activity_id = _idRange.getLowerLimit();
 
-        for(int i=0; i< 1000; i++) {
-            System.out.println(action + " " + type + " " + field + " " + row + " " + unit + " " + date);
+        // For each farm that the current farmer is employed by
+        for(int i = 0; i < farms.length; i++) {
+            // Generate the activities performed by the farmer for the farm
+            for(int j = 0; j <= activitiesPerFarm; j++) {
+                this.activities[i][j] = new Activity();
+            }
         }
     }
 
     @Override
     public String toString() {
-        String arrayString = "[";
-        for(int i = 0; i < farms.length - 1; i++) {
-            arrayString += farms[i] + ", ";
-        }
-        arrayString += farms[farms.length - 1] + "]";
-
-        return "[" + _id + ", " + name + ", " + email + ", " + password + ", " + phoneNumber + ", " + arrayString + "]";
+        return "[" + _id + ", " + name + ", " + email + ", " + password + ", " + phoneNumber + ", " + Arrays.toString(this.farms) + "]";
     }
 }
