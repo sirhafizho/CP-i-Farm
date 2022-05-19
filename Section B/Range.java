@@ -28,6 +28,11 @@ public class Range {
     }
 
     public int getLimitDifference() {
-        return this.upperLimit - this.lowerLimit + 1;
+        return (this.upperLimit - this.lowerLimit) + 1;
+    }
+
+    @Override
+    public String toString() {
+        return "The Lower Limit: " + this.lowerLimit + ", The Upper Limit: " + this.upperLimit + ", The Limit Difference: " + this.getLimitDifference();
     }
 }

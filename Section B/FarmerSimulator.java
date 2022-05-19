@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
-
+import java.util.concurrent.TimeUnit;
 import java.sql.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -31,7 +31,6 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     Statement stmt = mysqlCon.conn();
 
     // This method generates a number of farmers
-    @Override
     public Farmer[] generateFarmers(int numberOfFarmers)
     {   
 
@@ -241,10 +240,9 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     public void sequentialActivityGenerate(Farmer farmer){
 
         System.out.println("\nFarmer " + farmer.getId() + ": Farms " + Arrays.toString(farmer.getFarms()));
-        
-        for(String farm : farmer.getFarms()){
+    
 
-            
+        for(String farm : farmer.getFarms()){
             String[] plants = new String[0];
             String[] fertilizers = new String[0];
             String[] pesticides = new String[0];
@@ -277,8 +275,8 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
 
             // to generate random activities
             for(int i=0; i<numOfActivity; i++){
+                
                 String date = generateDate();
-
                 int act = 1 + random.nextInt(5);
                 String action = "";
                 String type = "";
@@ -407,15 +405,78 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         }
     }
 
+    public void resetActivitiesTable() {
+        try {
+            //checking if Activities table already exists and dropping it if it does
+            DatabaseMetaData meta = mysqlCon.getCon().getMetaData();
+            ResultSet resultSet = meta.getTables(null, null, "Activities",  new String[] {"TABLE"});
+            if(resultSet.next()){
+                System.out.println("Activities table already exists...");
+                String dropSQL = "DROP TABLE Activities";
+                stmt.executeUpdate(dropSQL);
+                System.out.println("Activities table dropped");
+            }
+
+            //creating a new Activities table
+            String createSQL = "CREATE TABLE Activities " +
+                   "(_id VARCHAR(255) not NULL, " +
+                   " date date NOT NULL, " + 
+                   " action varchar(100) NOT NULL, " + 
+                   " type varchar(100) NOT NULL, " +
+                   " unit varchar(50) NOT NULL, " + 
+                   " quantity int(50) NOT NULL, " +
+                   " field int(50) NOT NULL, " +
+                   " row int(50) NOT NULL, " +
+                   " farmId varchar(100) NOT NULL, " +
+                   " userId varchar(100) NOT NULL, " +
+                   " PRIMARY KEY ( _id ))";
+            System.out.println("Creating new Activities table...");
+            stmt.executeUpdate(createSQL);
+            System.out.println("Activities table created..." + "\n");
+        
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+    }
+
     public void concurrentActivityGeneration(Farmer[] farmers) throws InterruptedException {
+
+        System.out.println("\nConcurrent Activity Generation Starts");
+        
+        // Resetting Activities Table for Concurrent Approach
+        resetActivitiesTable();
+
+        // Delete concurrent activity log if already exists
+        try{
+            Path fileToDeletePath = Paths.get("Concurrent Activity Log.txt");
+            File file = new File("Concurrent Activity Log.txt");
+            if(file.exists()){
+                Files.delete(fileToDeletePath);
+            }
+        }catch (IOException e){
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        // Create new concurrent activity log
+        try {
+            FileWriter myWriter = new FileWriter("Concurrent Activity Log.txt");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        
         // Initalize an array to hold all the threads
         Thread[] threads = new Thread[farmers.length];
 
         // Initalize a fixed value for the number of activities per farm
-        final int NUMBER_OF_ACTIVITIES_PER_FARM = 1000;
+        // final int NUMBER_OF_ACTIVITIES_PER_FARM = 10;
 
         // Iniatlize a variable to keep track of the range of _id to pass to the farmers
-        Range range = new Range(1);
+        // Range range = new Range(1);
+
+        // Initialize counter id
+        Counter counter_id = new Counter();
 
         // Initalize then start the timer
         Timer timer = new Timer();
@@ -423,21 +484,27 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
 
         for(int i = 0; i < farmers.length; i++) {
             // Determine the number of activities that is going to be performed by the farmer
-            int expectedNumberOfActivites = farmers[i].getFarms().length * NUMBER_OF_ACTIVITIES_PER_FARM;
+            // Limitation : All the farms for the farmer will have the same amount of activities.
+            // Reasoning : It may not represent real life simulation but it should not affect the correct flow of the program.
+            // int expectedNumberOfActivites = farmers[i].getFarms().length * NUMBER_OF_ACTIVITIES_PER_FARM;
 
             // Based on the number of activities that is going to be performed by the farmer, determine the upper limit of the range of _id for the farmer
-            range.setUpperLimit(range.getLowerLimit() - 1 + expectedNumberOfActivites);
+            // range.setUpperLimit(range.getLowerLimit() - 1 + expectedNumberOfActivites);
 
             // Set the _id range for the farmer
-            farmers[i].setRange(range);
+            // farmers[i].setRange(range);
 
-            // Initiazlie a thread then start it
+            // Set the id counter
+            farmers[i].setCounter(counter_id);
+
+            // Initialize a thread then start it
             threads[i] = new Thread(farmers[i]);
             threads[i].start();
-
+        
             // Determine the lower limit of the next range
-            range.setLowerLimit(range.getLowerLimit() + expectedNumberOfActivites);
+            // range.setLowerLimit(range.getLowerLimit() + expectedNumberOfActivites);
         }
+
 
         // Wait for all threads to complete the run
         for(Thread thread : threads) {
@@ -448,7 +515,6 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         for(int i = 0; i < farmers.length; i++) {
             // Get the activities that they have performed
             Activity[][] activities = farmers[i].getActivities();
-
             // For the activities of a farm
             for(int j = 0; j < activities.length; j++) {
                 // For each of the activities
@@ -459,16 +525,16 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                         PreparedStatement preparedStatement = this.mysqlCon.getCon().prepareStatement(preparedSQL);
         
                         // Insert the activity information into the PreparedStatement
-                        preparedStatement.setString(1, activities[i][k].get_id());
-                        preparedStatement.setString(2, activities[i][k].getDate());
-                        preparedStatement.setString(3, activities[i][k].getAction());
-                        preparedStatement.setString(4, activities[i][k].getType());
-                        preparedStatement.setString(5, activities[i][k].getUnit());
-                        preparedStatement.setInt(6, activities[i][k].getQuantity());
-                        preparedStatement.setInt(7, activities[i][k].getField());
-                        preparedStatement.setInt(8, activities[i][k].getRow());
-                        preparedStatement.setString(9, Integer.toString(activities[i][k].getFarmId()));
-                        preparedStatement.setString(10, Integer.toString(activities[i][k].getUserId()));
+                        preparedStatement.setString(1, activities[j][k].get_id());
+                        preparedStatement.setString(2, activities[j][k].getDate());
+                        preparedStatement.setString(3, activities[j][k].getAction());
+                        preparedStatement.setString(4, activities[j][k].getType());
+                        preparedStatement.setString(5, activities[j][k].getUnit());
+                        preparedStatement.setInt(6, activities[j][k].getQuantity());
+                        preparedStatement.setInt(7, activities[j][k].getField());
+                        preparedStatement.setInt(8, activities[j][k].getRow());
+                        preparedStatement.setString(9, Integer.toString(activities[j][k].getFarmId()));
+                        preparedStatement.setString(10, Integer.toString(activities[j][k].getUserId()));
         
                         // Insert the activity into the database
                         preparedStatement.executeUpdate();
@@ -483,6 +549,6 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
 
         // Stop the timer then display time it took for farmers to concurrently generate activities and to write the activities to the database
         timer.endTime();
-        System.out.println("Concurrent activity generation took " + timer.timeTaken() + "ns");
+        System.out.println("Concurrent activity generation took " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n" );
     }
 }

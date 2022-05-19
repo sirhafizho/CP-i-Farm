@@ -215,7 +215,7 @@ CREATE TABLE `pesticides` (
 -- Dumping data for table `pesticides`
 --
 
-INSERT INTO `pesticides` (`_id`, `name`, `unitTyoe`) VALUES
+INSERT INTO `pesticides` (`_id`, `name`, `unitType`) VALUES
 ('1', 'Pesticide B', 'mass'),
 ('10', 'Pesticide C', 'mass'),
 ('100', 'Chlorophen', 'mass'),
