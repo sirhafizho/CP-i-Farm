@@ -442,6 +442,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     public void concurrentActivityGeneration(Farmer[] farmers) throws InterruptedException {
 
         System.out.println("\nConcurrent Activity Generation Starts");
+        System.out.println("\nStart Timer");
         
         // Resetting Activities Table for Concurrent Approach
         resetActivitiesTable();
@@ -469,11 +470,6 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         // Initalize an array to hold all the threads
         Thread[] threads = new Thread[farmers.length];
 
-        // Initalize a fixed value for the number of activities per farm
-        // final int NUMBER_OF_ACTIVITIES_PER_FARM = 10;
-
-        // Iniatlize a variable to keep track of the range of _id to pass to the farmers
-        // Range range = new Range(1);
 
         // Initialize counter id
         Counter counter_id = new Counter();
@@ -483,26 +479,12 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         timer.startTime();
 
         for(int i = 0; i < farmers.length; i++) {
-            // Determine the number of activities that is going to be performed by the farmer
-            // Limitation : All the farms for the farmer will have the same amount of activities.
-            // Reasoning : It may not represent real life simulation but it should not affect the correct flow of the program.
-            // int expectedNumberOfActivites = farmers[i].getFarms().length * NUMBER_OF_ACTIVITIES_PER_FARM;
-
-            // Based on the number of activities that is going to be performed by the farmer, determine the upper limit of the range of _id for the farmer
-            // range.setUpperLimit(range.getLowerLimit() - 1 + expectedNumberOfActivites);
-
-            // Set the _id range for the farmer
-            // farmers[i].setRange(range);
-
             // Set the id counter
             farmers[i].setCounter(counter_id);
 
             // Initialize a thread then start it
             threads[i] = new Thread(farmers[i]);
             threads[i].start();
-        
-            // Determine the lower limit of the next range
-            // range.setLowerLimit(range.getLowerLimit() + expectedNumberOfActivites);
         }
 
 
@@ -549,6 +531,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
 
         // Stop the timer then display time it took for farmers to concurrently generate activities and to write the activities to the database
         timer.endTime();
-        System.out.println("Concurrent activity generation took " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n" );
+        System.out.println("\nStop Timer");
+        System.out.println("\nConcurrent activity generation took " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n" );
     }
 }
