@@ -443,7 +443,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
 
         
         // Resetting Activities Table for Concurrent Approach
-        resetActivitiesTable();
+        // resetActivitiesTable();
 
         // Delete concurrent activity log if already exists
         try{
