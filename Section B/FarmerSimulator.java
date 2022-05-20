@@ -441,8 +441,6 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
 
     public void concurrentActivityGeneration(Farmer[] farmers) throws InterruptedException {
 
-        System.out.println("\nConcurrent Activity Generation Starts");
-        System.out.println("\nStart Timer\n");
         
         // Resetting Activities Table for Concurrent Approach
         resetActivitiesTable();
@@ -473,6 +471,9 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
 
         // Initialize counter id
         Counter counter_id = new Counter();
+
+        System.out.println("\nConcurrent Activity Generation Starts");
+        System.out.println("\nStart Timer\n");
 
         // Initalize then start the timer
         Timer timer = new Timer();
