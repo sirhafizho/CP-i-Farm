@@ -8,7 +8,6 @@ public class Farmer implements Runnable {
     private String phoneNumber;
     private String[] farms;
 
-    private Range _idRange;
     private Activity[][] activities;
 
     Farmer(String _id, String name, String email, String password, String phoneNumber, String[] farms) {
@@ -62,25 +61,17 @@ public class Farmer implements Runnable {
         this.farms = farms;
     }
 
-    public void setRange(Range range) {
-        this._idRange = range;
-    }
-
     public Activity[][] getActivities() {
         return this.activities;
     }
 
-    // William, this is Irfan, please take note of the _idRange object and the activties 2d array when implementing your part
+    // William, this is Irfan, please take note of the activties 2d array when implementing your part
     @Override
     public void run() {
-        int activitiesPerFarm = _idRange.getLimitDifference() / this.farms.length;
-        int activity_id = _idRange.getLowerLimit();
-
         // For each farm that the current farmer is employed by
         for(int i = 0; i < farms.length; i++) {
             // Generate the activities performed by the farmer for the farm
-            for(int j = 0; j <= activitiesPerFarm; j++) {
-                this.activities[i][j] = new Activity();
+            for(int j = 0; j <= ; j++) {
             }
         }
     }

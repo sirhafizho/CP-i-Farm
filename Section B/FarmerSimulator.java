@@ -411,38 +411,23 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         // Initalize an array to hold all the threads
         Thread[] threads = new Thread[farmers.length];
 
-        // Initalize a fixed value for the number of activities per farm
-        final int NUMBER_OF_ACTIVITIES_PER_FARM = 1000;
-
-        // Iniatlize a variable to keep track of the range of _id to pass to the farmers
-        Range range = new Range(1);
-
         // Initalize then start the timer
         Timer timer = new Timer();
         timer.startTime();
 
         for(int i = 0; i < farmers.length; i++) {
-            // Determine the number of activities that is going to be performed by the farmer
-            int expectedNumberOfActivites = farmers[i].getFarms().length * NUMBER_OF_ACTIVITIES_PER_FARM;
-
-            // Based on the number of activities that is going to be performed by the farmer, determine the upper limit of the range of _id for the farmer
-            range.setUpperLimit(range.getLowerLimit() - 1 + expectedNumberOfActivites);
-
-            // Set the _id range for the farmer
-            farmers[i].setRange(range);
-
             // Initiazlie a thread then start it
             threads[i] = new Thread(farmers[i]);
             threads[i].start();
-
-            // Determine the lower limit of the next range
-            range.setLowerLimit(range.getLowerLimit() + expectedNumberOfActivites);
         }
 
         // Wait for all threads to complete the run
         for(Thread thread : threads) {
             thread.join();
         }
+
+        // Initialize a variable that will keep track of the 
+        int activity_id = 1;
 
         // For each farmer
         for(int i = 0; i < farmers.length; i++) {
@@ -459,19 +444,22 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                         PreparedStatement preparedStatement = this.mysqlCon.getCon().prepareStatement(preparedSQL);
         
                         // Insert the activity information into the PreparedStatement
-                        preparedStatement.setString(1, activities[i][k].get_id());
-                        preparedStatement.setString(2, activities[i][k].getDate());
-                        preparedStatement.setString(3, activities[i][k].getAction());
-                        preparedStatement.setString(4, activities[i][k].getType());
-                        preparedStatement.setString(5, activities[i][k].getUnit());
-                        preparedStatement.setInt(6, activities[i][k].getQuantity());
-                        preparedStatement.setInt(7, activities[i][k].getField());
-                        preparedStatement.setInt(8, activities[i][k].getRow());
-                        preparedStatement.setString(9, Integer.toString(activities[i][k].getFarmId()));
-                        preparedStatement.setString(10, Integer.toString(activities[i][k].getUserId()));
+                        preparedStatement.setString(1, Integer.toString(activity_id));
+                        preparedStatement.setString(2, activities[j][k].getDate());
+                        preparedStatement.setString(3, activities[j][k].getAction());
+                        preparedStatement.setString(4, activities[j][k].getType());
+                        preparedStatement.setString(5, activities[j][k].getUnit());
+                        preparedStatement.setInt(6, activities[j][k].getQuantity());
+                        preparedStatement.setInt(7, activities[j][k].getField());
+                        preparedStatement.setInt(8, activities[j][k].getRow());
+                        preparedStatement.setString(9, Integer.toString(activities[j][k].getFarmId()));
+                        preparedStatement.setString(10, Integer.toString(activities[j][k].getUserId()));
         
                         // Insert the activity into the database
                         preparedStatement.executeUpdate();
+
+                        // Increment the activity _id for the next activity to be inserted into the database
+                        activity_id++;
                     }
                     catch(SQLException e) {
                         // Print out error message to the terminal if any
