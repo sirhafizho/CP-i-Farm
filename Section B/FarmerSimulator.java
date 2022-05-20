@@ -442,7 +442,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     public void concurrentActivityGeneration(Farmer[] farmers) throws InterruptedException {
 
         System.out.println("\nConcurrent Activity Generation Starts");
-        System.out.println("\nStart Timer");
+        System.out.println("\nStart Timer\n");
         
         // Resetting Activities Table for Concurrent Approach
         resetActivitiesTable();
@@ -493,6 +493,9 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             thread.join();
         }
 
+        // Initialize a variable that will keep track of the 
+        int activity_id = 1;
+
         // For each farmer
         for(int i = 0; i < farmers.length; i++) {
             // Get the activities that they have performed
@@ -520,6 +523,9 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         
                         // Insert the activity into the database
                         preparedStatement.executeUpdate();
+
+                        // Increment the activity _id for the next activity to be inserted into the database
+                        activity_id++;
                     }
                     catch(SQLException e) {
                         // Print out error message to the terminal if any
