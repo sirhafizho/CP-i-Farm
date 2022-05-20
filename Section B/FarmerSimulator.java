@@ -416,7 +416,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         timer.startTime();
 
         for(int i = 0; i < farmers.length; i++) {
-            // Initiazlie a thread then start it
+            // Initialize a thread then start it
             threads[i] = new Thread(farmers[i]);
             threads[i].start();
         }
