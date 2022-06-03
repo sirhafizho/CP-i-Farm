@@ -1,12 +1,15 @@
 import java.sql.*;
 
-public class DataVisualization {
-    
-    public DataVisualization() {
-        //initializing the mysql connection class
-        MysqlCon mysqlCon = new MysqlCon();
-        Statement stmt = mysqlCon.conn();
+import com.mysql.cj.xdevapi.Result;
 
+public class DataVisualization {
+    //initializing the mysql connection class
+    MysqlCon mysqlCon = new MysqlCon();
+    Statement stmt = mysqlCon.conn();
+
+    public DataVisualization() {}
+
+    public void processActivities(){
         try{
             //to check if activities table exists
             DatabaseMetaData meta = mysqlCon.getCon().getMetaData();
@@ -66,5 +69,77 @@ public class DataVisualization {
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
+    }
+
+    public ResultSet displayActivityLogsFarm(String farmID){
+        ResultSet rs = null;
+        try{
+            //get activities based on farm id
+            String sqlQuery = "SELECT * FROM Processed_Activities"+
+            " WHERE farmId = "+farmID +
+            " ORDER BY date ASC";                
+             rs = stmt.executeQuery(sqlQuery);
+             printActivityLog(rs);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return rs;
+    }
+
+    public ResultSet displayActivityLogsFarmer(String farmerID){
+        ResultSet rs = null;
+        try{
+            //get activities based on farmer id
+            String sqlQuery = "SELECT * FROM Processed_Activities"+
+            " WHERE userId = "+farmerID +
+            " ORDER BY date ASC";                
+             rs = stmt.executeQuery(sqlQuery);
+             printActivityLog(rs);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return rs;
+    }
+
+    public ResultSet displayActivityLogsFarmType(String farmID, String type){
+        ResultSet rs = null;
+        try{
+            //get activities based on farm id & type of plant / fertilizer / pesticide
+            String sqlQuery = "SELECT * FROM Processed_Activities"+
+            " WHERE farmId = "+ farmID +
+            " AND LOWER(type) = LOWER('"+type+"')" +
+            " ORDER BY date ASC";                
+             rs = stmt.executeQuery(sqlQuery);
+             printActivityLog(rs);
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+
+        return rs;
+    }
+
+    public void printActivityLog(ResultSet rs){
+        try{
+            if(rs == null){
+                System.out.println("\nNo records found");
+            } else{
+                while(rs.next()){
+                   String action = rs.getString("action");
+                   String type = rs.getString("type");
+                   int field = rs.getInt("field");
+                   int row = rs.getInt("row");
+                   int quantity = rs.getInt("quantity");
+                   String unit = rs.getString("unit");
+                   Date date = rs.getDate("date");
+    
+                   System.out.println(action + " " + type + " Field " + field + " Row " + row + " " + quantity + " " + unit + " " + date.toString());
+                }
+            }
+        } catch(SQLException e){
+            System.out.println(e.toString());
+        }
+        
     }
 }

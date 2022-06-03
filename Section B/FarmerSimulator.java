@@ -239,7 +239,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     //This method simulates the sequential activity generation
     public void sequentialActivityGenerate(Farmer farmer){
 
-        resetActivitiesTable();
+        //resetActivitiesTable();
         
         System.out.println("\nFarmer " + farmer.getId() + ": Farms " + Arrays.toString(farmer.getFarms()));
     
