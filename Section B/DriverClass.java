@@ -1,6 +1,8 @@
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.InputMismatchException;
 import java.util.Random;
@@ -68,10 +70,11 @@ public class DriverClass {
                 break;
             }
             
+            String farmID, farmerID, typeName, fromDate, toDate, fieldNumber, rowNumber;
+
             // switch case to perform sql commands
             switch (input) {
                 case 1:
-                    String farmID = "";
                     System.out.print("\nEnter Farm ID: ");
                     do{
                         farmID = s.next();
@@ -79,7 +82,6 @@ public class DriverClass {
                     visualize.displayActivityLogsFarm(farmID);    
                     break;
                 case 2:
-                    String farmerID;
                     System.out.print("\nEnter Farmer ID: ");  
                     do{
                         farmerID = s.next();
@@ -87,18 +89,74 @@ public class DriverClass {
                     visualize.displayActivityLogsFarmer(farmerID);    
                     break;
                 case 3:
-                    String id_farm;
-                    String typeName;
                     System.out.print("\nEnter Farm ID: ");
                     do{
-                        id_farm = s.next();
-                    } while(id_farm.isEmpty()); 
+                        farmID = s.next();
+                    } while(farmID.isEmpty()); 
                     System.out.print("\nEnter plant / fertilizer / pesticide name: ");
                     do{
                         typeName = s.next();
                     } while(typeName.isEmpty());
 
-                    visualize.displayActivityLogsFarmType(id_farm, typeName);
+                    visualize.displayActivityLogsFarmType(farmID, typeName);
+                    break;
+                case 4:
+                    System.out.print("\nEnter Farm ID: ");
+                    do{
+                        farmID = s.next();
+                        s.nextLine();
+                    } while(farmID.isEmpty()); 
+                    System.out.print("\nEnter plant / fertilizer / pesticide name: ");
+                    do{
+                        typeName = s.next();
+                        s.nextLine();
+                    } while(typeName.isEmpty());
+                    System.out.print("\nEnter start date: ");
+                    do{
+                        fromDate = s.next();
+                        s.nextLine();
+                    } while(fromDate.isEmpty());
+                    System.out.print("\nEnter end date: ");
+                    do{
+                        toDate = s.next();
+                        s.nextLine();
+                    } while(toDate.isEmpty());            
+
+                    visualize.displayActivityLogsFarmTypeDate(farmID, typeName, fromDate, toDate);
+                    break;
+                case 5:
+                    System.out.print("\nEnter Farm ID: ");
+                    do{
+                        farmID = s.next();
+                        s.nextLine();
+                    } while(farmID.isEmpty()); 
+                    System.out.print("\nEnter plant / fertilizer / pesticide name: ");
+                    do{
+                        typeName = s.next();
+                        s.nextLine();
+                    } while(typeName.isEmpty());
+                    System.out.print("\nEnter start date: ");
+                    do{
+                        fromDate = s.next();
+                        s.nextLine();
+                    } while(fromDate.isEmpty());
+                    System.out.print("\nEnter end date: ");
+                    do{
+                        toDate = s.next();
+                        s.nextLine();
+                    } while(toDate.isEmpty());
+                    System.out.print("\nEnter field number: ");
+                    do{
+                        fieldNumber = s.next();
+                        s.nextLine();
+                    } while(toDate.isEmpty());
+                    System.out.print("\nEnter row number: ");
+                    do{
+                        rowNumber = s.next();
+                        s.nextLine();
+                    } while(toDate.isEmpty());
+
+                    visualize.displayActivityLogsFarmTypeDateFieldRow(farmID, typeName, fromDate, toDate, fieldNumber, rowNumber);
                     break;
                 default:
                     System.out.println("Invalid input\n");
