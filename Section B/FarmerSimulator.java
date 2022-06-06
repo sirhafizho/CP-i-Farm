@@ -191,7 +191,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             }
 
             // to get random number of activities
-            int numOfActivity = 1 + random.nextInt(15);
+            int numOfActivity = 1 + random.nextInt(500);
             System.out.println("Farmer " + farmer.getId() + " generates " + numOfActivity + " activities of random types for Farm " + farm);
 
             // Write the farmers’ sent operations and success operations into log file
@@ -411,48 +411,47 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         while (!executor.isTerminated()) {
         }
 
-        timer.endTime();
-
-        int counterid = 1;
-        // For each farmer
-        for(int i = 0; i < farmers.length; i++) {
-            // Get the activities that they have performed
-            Activity[][] activities = farmers[i].getActivities();
-            // For the activities of a farm
-            for(int j = 0; j < activities.length; j++) {
-                // For each of the activities
-                for(int k = 0; k < activities[j].length; k++) {
-                    try {
-                        // Prepare the insert query statement to insert activity into database then get the editable PreparedStatement
-                        String preparedSQL = "INSERT INTO activities(_id, date, action, type, unit, quantity, field, row, farmId, userId) "+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
-                        PreparedStatement preparedStatement = this.mysqlCon.getCon().prepareStatement(preparedSQL);
+        // int counterid = 1;
+        // // For each farmer
+        // for(int i = 0; i < farmers.length; i++) {
+        //     // Get the activities that they have performed
+        //     Activity[][] activities = farmers[i].getActivities();
+        //     // For the activities of a farm
+        //     for(int j = 0; j < activities.length; j++) {
+        //         // For each of the activities
+        //         for(int k = 0; k < activities[j].length; k++) {
+        //             try {
+        //                 System.out.println("Inserting");
+        //                 // Prepare the insert query statement to insert activity into database then get the editable PreparedStatement
+        //                 String preparedSQL = "INSERT INTO activities(_id, date, action, type, unit, quantity, field, row, farmId, userId) "+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+        //                 PreparedStatement preparedStatement = this.mysqlCon.getCon().prepareStatement(preparedSQL);
         
-                        // Insert the activity information into the PreparedStatement
-                        preparedStatement.setString(1, "" + counterid);
-                        // preparedStatement.setString(1, activities[j][k].get_id());
-                        preparedStatement.setString(2, activities[j][k].getDate());
-                        preparedStatement.setString(3, activities[j][k].getAction());
-                        preparedStatement.setString(4, activities[j][k].getType());
-                        preparedStatement.setString(5, activities[j][k].getUnit());
-                        preparedStatement.setInt(6, activities[j][k].getQuantity());
-                        preparedStatement.setInt(7, activities[j][k].getField());
-                        preparedStatement.setInt(8, activities[j][k].getRow());
-                        preparedStatement.setString(9, Integer.toString(activities[j][k].getFarmId()));
-                        preparedStatement.setString(10, Integer.toString(activities[j][k].getUserId()));
+        //                 // Insert the activity information into the PreparedStatement
+        //                 preparedStatement.setString(1, Integer.toString(counterid));
+        //                 preparedStatement.setString(2, activities[j][k].getDate());
+        //                 preparedStatement.setString(3, activities[j][k].getAction());
+        //                 preparedStatement.setString(4, activities[j][k].getType());
+        //                 preparedStatement.setString(5, activities[j][k].getUnit());
+        //                 preparedStatement.setInt(6, activities[j][k].getQuantity());
+        //                 preparedStatement.setInt(7, activities[j][k].getField());
+        //                 preparedStatement.setInt(8, activities[j][k].getRow());
+        //                 preparedStatement.setString(9, Integer.toString(activities[j][k].getFarmId()));
+        //                 preparedStatement.setString(10, Integer.toString(activities[j][k].getUserId()));
         
-                        // Insert the activity into the database
-                        preparedStatement.executeUpdate();
-                        counterid++;
-                    }
-                    catch(SQLException e) {
-                        // Print out error message to the terminal if any
-                        System.out.println(e.getMessage());
-                    }
-                }
-            }
-        }
+        //                 // Insert the activity into the database
+        //                 preparedStatement.executeUpdate();
+        //                 counterid++;
+        //             }
+        //             catch(SQLException e) {
+        //                 // Print out error message to the terminal if any
+        //                 System.out.println(e.getMessage());
+        //             }
+        //         }
+        //     }
+        // }
 
         // Stop the timer then display time it took for farmers to concurrently generate activities and to write the activities to the database
+        timer.endTime();
         System.out.println("\nStop Timer");
         System.out.println("\nConcurrent activity generation took " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n" );
     }

@@ -134,7 +134,7 @@ public class Farmer implements Runnable {
 
         // For each farm that the current farmer is employed by
         for(int i = 0; i < farms.length; i++) {
-            int numOfActivity = randomC.nextInt(15) + 1;
+            int numOfActivity = randomC.nextInt(500) + 1;
             this.activities[i] = new Activity[numOfActivity];
 
             String[] plants = new String[0];
@@ -268,8 +268,32 @@ public class Farmer implements Runnable {
                         System.out.println(e.getMessage());
                     }
                 }
-                String tempid = "";
+                String tempid = "" + farms[i] + "" + this._id + "" + j; 
                 this.activities[i][j] = new Activity(tempid,date,action,type,unit,quantity,field,row,Integer.parseInt(farms[i]),Integer.parseInt(this._id));
+                try {
+                        // Prepare the insert query statement to insert activity into database then get the editable PreparedStatement
+                        String preparedSQL = "INSERT INTO activities(_id, date, action, type, unit, quantity, field, row, farmId, userId) "+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
+                        PreparedStatement preparedStatement = this.mysqlCon.getCon().prepareStatement(preparedSQL);
+                    
+                        // Insert the activity information into the PreparedStatement
+                        preparedStatement.setString(1, tempid);
+                        preparedStatement.setString(2, date);
+                        preparedStatement.setString(3, action);
+                        preparedStatement.setString(4, type);
+                        preparedStatement.setString(5, unit);
+                        preparedStatement.setInt(6, quantity);
+                        preparedStatement.setInt(7, field);
+                        preparedStatement.setInt(8, row);
+                        preparedStatement.setString(9, farms[i]);
+                        preparedStatement.setString(10, this._id);
+                    
+                        // Insert the activity into the database
+                        preparedStatement.executeUpdate();
+                        }
+                        catch(SQLException e) {
+                            // Print out error message to the terminal if any
+                            System.out.println(e.getMessage());
+                        }
             }
         }
     }
