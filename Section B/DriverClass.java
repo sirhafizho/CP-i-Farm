@@ -11,15 +11,27 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import java.sql.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.FileWriter;
 
 public class DriverClass {
+
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+
+        checkDB();
 
         FarmerSimulator simulator = new FarmerSimulator();
 
         Farmer[] farmers = simulator.generateFarmers(4);
 
-        // // start timer
+        // SEQUENTIAL PART
+        createNewSeqLog();
+        // start timer
         System.out.println("\nSequential Activity Generation Starts");
         System.out.println("\nStart Timer");
         Timer timer = new Timer();
@@ -181,5 +193,86 @@ public class DriverClass {
             e.printStackTrace();
         }
 
+    }
+
+
+    public static void checkDB() {
+        //initializing the mysql connection class
+        MysqlCon mysqlCon = new MysqlCon();
+        Statement stmt = mysqlCon.conn();
+        try {
+            //checking if Users table already exists and dropping it if it does
+            DatabaseMetaData meta = mysqlCon.getCon().getMetaData();
+            ResultSet resultSet = meta.getTables(null, null, "Users",  new String[] {"TABLE"});
+            if(resultSet.next()){
+                System.out.println("Users table already exists...");
+                String dropSQL = "DROP TABLE Users";
+                stmt.executeUpdate(dropSQL);
+                System.out.println("Users table dropped");
+            }
+
+            //creating a new Users table
+            String createSQL = "CREATE TABLE Users " +
+                   "(_id VARCHAR(255) not NULL, " +
+                   " name VARCHAR(255), " + 
+                   " email VARCHAR(255), " + 
+                   " password VARCHAR(255), " +
+                   " phoneNumber VARCHAR(255), " + 
+                   " farms VARCHAR(255), " + 
+                   " PRIMARY KEY ( _id ))";
+            System.out.println("Creating new Users table...");
+            stmt.executeUpdate(createSQL);
+            System.out.println("Users table created...");
+
+            //checking if Activities table already exists and dropping it if it does
+            resultSet = meta.getTables(null, null, "Activities",  new String[] {"TABLE"});
+            if(resultSet.next()){
+                System.out.println("Activities table already exists...");
+                String dropSQL = "DROP TABLE Activities";
+                stmt.executeUpdate(dropSQL);
+                System.out.println("Activities table dropped");
+            }
+
+            //creating a new Activities table
+            createSQL = "CREATE TABLE Activities " +
+                   "(_id VARCHAR(255) not NULL, " +
+                   " date date NOT NULL, " + 
+                   " action varchar(100) NOT NULL, " + 
+                   " type varchar(100) NOT NULL, " +
+                   " unit varchar(50) NOT NULL, " + 
+                   " quantity int(50) NOT NULL, " +
+                   " field int(50) NOT NULL, " +
+                   " row int(50) NOT NULL, " +
+                   " farmId varchar(100) NOT NULL, " +
+                   " userId varchar(100) NOT NULL, " +
+                   " PRIMARY KEY ( _id ))";
+            System.out.println("Creating new Activities table...");
+            stmt.executeUpdate(createSQL);
+            System.out.println("Activities table created..." + "\n");
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+    }
+
+    public static void createNewSeqLog() {
+        // delete sequential activity log if already exists
+        try{
+            Path fileToDeletePath = Paths.get("Sequential Activity Log.txt");
+            File file = new File("Sequential Activity Log.txt");
+            if(file.exists()){
+                Files.delete(fileToDeletePath);
+            }
+        }catch (IOException e){
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        // create new sequential activity log
+        try {
+            FileWriter myWriter = new FileWriter("Sequential Activity Log.txt");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 }

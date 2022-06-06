@@ -35,7 +35,6 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     // This method generates a number of farmers
     public Farmer[] generateFarmers(int numberOfFarmers)
     {   
-
         // Prepare variables required for the generation of the details of the farmers
         Farmer[] farmers = new Farmer[numberOfFarmers];
         
@@ -43,82 +42,10 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         String alphanumericCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
         final int MAX_FARM_NUMBER = 5;
         BinaryTree binaryTree = null;
-
         String preparedSQL = "INSERT INTO Users(_id, name, email, password, phoneNumber, farms) "+ "VALUES(?,?,?,?,?,?)";
-
-        try {
-            //checking if Users table already exists and dropping it if it does
-            DatabaseMetaData meta = mysqlCon.getCon().getMetaData();
-            ResultSet resultSet = meta.getTables(null, null, "Users",  new String[] {"TABLE"});
-            if(resultSet.next()){
-                System.out.println("Users table already exists...");
-                String dropSQL = "DROP TABLE Users";
-                stmt.executeUpdate(dropSQL);
-                System.out.println("Users table dropped");
-            }
-
-            //creating a new Users table
-            String createSQL = "CREATE TABLE Users " +
-                   "(_id VARCHAR(255) not NULL, " +
-                   " name VARCHAR(255), " + 
-                   " email VARCHAR(255), " + 
-                   " password VARCHAR(255), " +
-                   " phoneNumber VARCHAR(255), " + 
-                   " farms VARCHAR(255), " + 
-                   " PRIMARY KEY ( _id ))";
-            System.out.println("Creating new Users table...");
-            stmt.executeUpdate(createSQL);
-            System.out.println("Users table created...");
-
-            //checking if Activities table already exists and dropping it if it does
-            resultSet = meta.getTables(null, null, "Activities",  new String[] {"TABLE"});
-            if(resultSet.next()){
-                System.out.println("Activities table already exists...");
-                String dropSQL = "DROP TABLE Activities";
-                stmt.executeUpdate(dropSQL);
-                System.out.println("Activities table dropped");
-            }
-
-            //creating a new Activities table
-            createSQL = "CREATE TABLE Activities " +
-                   "(_id VARCHAR(255) not NULL, " +
-                   " date date NOT NULL, " + 
-                   " action varchar(100) NOT NULL, " + 
-                   " type varchar(100) NOT NULL, " +
-                   " unit varchar(50) NOT NULL, " + 
-                   " quantity int(50) NOT NULL, " +
-                   " field int(50) NOT NULL, " +
-                   " row int(50) NOT NULL, " +
-                   " farmId varchar(100) NOT NULL, " +
-                   " userId varchar(100) NOT NULL, " +
-                   " PRIMARY KEY ( _id ))";
-            System.out.println("Creating new Activities table...");
-            stmt.executeUpdate(createSQL);
-            System.out.println("Activities table created..." + "\n");
-
-            // delete sequential activity log if already exists
-            try{
-                Path fileToDeletePath = Paths.get("Sequential Activity Log.txt");
-                File file = new File("Sequential Activity Log.txt");
-                if(file.exists()){
-                    Files.delete(fileToDeletePath);
-                }
-            }catch (IOException e){
-                System.out.println("An error occurred.");
-                e.printStackTrace();
-            }
-
-            // create new sequential activity log
-            try {
-                FileWriter myWriter = new FileWriter("Sequential Activity Log.txt");
-            } catch (IOException e) {
-                System.out.println("An error occurred.");
-                e.printStackTrace();
-            }
-            
+        try {            
             // preparing the insert query to insert farmer into database
             PreparedStatement pstmt = mysqlCon.getCon().prepareStatement(preparedSQL);      
-
             // Generate farmers
             for(int i = 0; i < farmers.length; i++) {
                 // Generate the detail of the current farmer
@@ -160,6 +87,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                     System.out.println("Name API didn't work");
                     System.exit(1);
                 }
+
                 String email = name.replaceAll("\\s+", "").toLowerCase() + id + "@gmail.com";
                 String password = "";
                 for(int j = 0; j < PASSWORD_LENGTH; j++)
@@ -171,16 +99,15 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                     binaryTree.add(Integer.toString(1 + random.nextInt(10)));
                 farms = binaryTree.toStringArray();
 
+
+                System.out.println("Adding farmer "+id);
                 pstmt.setString(1, id);
                 pstmt.setString(2, name);
                 pstmt.setString(3, email);
                 pstmt.setString(4, password);
                 pstmt.setString(5, phoneNumber);
                 pstmt.setString(6, Arrays.toString(farms));
-
-                System.out.println("Adding farmer "+id);
                 pstmt.executeUpdate();
-                
                 farmers[i] = new Farmer(id, name, email, password, phoneNumber, farms);
             }
 
@@ -241,7 +168,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     //This method simulates the sequential activity generation
     public void sequentialActivityGenerate(Farmer farmer){
 
-        resetActivitiesTable();
+        // resetActivitiesTable();
         
         System.out.println("\nFarmer " + farmer.getId() + ": Farms " + Arrays.toString(farmer.getFarms()));
     
@@ -468,13 +395,6 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        
-        // Initalize an array to hold all the threads
-        Thread[] threads = new Thread[farmers.length];
-
-
-        // Initialize counter id
-        // Counter counter_id = new Counter();
 
         System.out.println("\nConcurrent Activity Generation Starts");
         System.out.println("\nStart Timer\n");
@@ -483,28 +403,14 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         Timer timer = new Timer();
         timer.startTime();
 
-        // ExecutorService executor = Executors.newFixedThreadPool(1000);
-        // for (int i = 0; i < farmers.length; i++) {
-        //     // Runnable worker = new WorkerThread("" + i);
-        //     executor.execute(farmers[i]);
-        //   }
-        // executor.shutdown();
-        // while (!executor.isTerminated()) {
-        // }
-
-        for(int i = 0; i < farmers.length; i++) {
-            // Set the id counter
-            // farmers[i].setCounter(counter_id);
-
-            // Initialize a thread then start it
-            threads[i] = new Thread(farmers[i]);
-            threads[i].start();
+        ExecutorService executor = Executors.newFixedThreadPool(1000);
+        for (int i = 0; i < farmers.length; i++) {
+            executor.execute(farmers[i]);
+          }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
         }
 
-        // Wait for all threads to complete the run
-        for(Thread thread : threads) {
-            thread.join();
-        }
         timer.endTime();
 
         int counterid = 1;
