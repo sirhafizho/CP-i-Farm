@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 import java.sql.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FarmerSimulator implements FarmerSimulatorInterface {
 
@@ -239,7 +241,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     //This method simulates the sequential activity generation
     public void sequentialActivityGenerate(Farmer farmer){
 
-        //resetActivitiesTable();
+        resetActivitiesTable();
         
         System.out.println("\nFarmer " + farmer.getId() + ": Farms " + Arrays.toString(farmer.getFarms()));
     
@@ -262,7 +264,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             }
 
             // to get random number of activities
-            int numOfActivity = 1 + random.nextInt(12);
+            int numOfActivity = 1 + random.nextInt(15);
             System.out.println("Farmer " + farmer.getId() + " generates " + numOfActivity + " activities of random types for Farm " + farm);
 
             // Write the farmers’ sent operations and success operations into log file
@@ -472,7 +474,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
 
 
         // Initialize counter id
-        Counter counter_id = new Counter();
+        // Counter counter_id = new Counter();
 
         System.out.println("\nConcurrent Activity Generation Starts");
         System.out.println("\nStart Timer\n");
@@ -481,22 +483,31 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         Timer timer = new Timer();
         timer.startTime();
 
+        // ExecutorService executor = Executors.newFixedThreadPool(1000);
+        // for (int i = 0; i < farmers.length; i++) {
+        //     // Runnable worker = new WorkerThread("" + i);
+        //     executor.execute(farmers[i]);
+        //   }
+        // executor.shutdown();
+        // while (!executor.isTerminated()) {
+        // }
+
         for(int i = 0; i < farmers.length; i++) {
             // Set the id counter
-            farmers[i].setCounter(counter_id);
+            // farmers[i].setCounter(counter_id);
 
             // Initialize a thread then start it
             threads[i] = new Thread(farmers[i]);
             threads[i].start();
         }
 
-
         // Wait for all threads to complete the run
         for(Thread thread : threads) {
             thread.join();
         }
+        timer.endTime();
 
-
+        int counterid = 1;
         // For each farmer
         for(int i = 0; i < farmers.length; i++) {
             // Get the activities that they have performed
@@ -511,7 +522,8 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                         PreparedStatement preparedStatement = this.mysqlCon.getCon().prepareStatement(preparedSQL);
         
                         // Insert the activity information into the PreparedStatement
-                        preparedStatement.setString(1, activities[j][k].get_id());
+                        preparedStatement.setString(1, "" + counterid);
+                        // preparedStatement.setString(1, activities[j][k].get_id());
                         preparedStatement.setString(2, activities[j][k].getDate());
                         preparedStatement.setString(3, activities[j][k].getAction());
                         preparedStatement.setString(4, activities[j][k].getType());
@@ -524,7 +536,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         
                         // Insert the activity into the database
                         preparedStatement.executeUpdate();
-
+                        counterid++;
                     }
                     catch(SQLException e) {
                         // Print out error message to the terminal if any
@@ -535,7 +547,6 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         }
 
         // Stop the timer then display time it took for farmers to concurrently generate activities and to write the activities to the database
-        timer.endTime();
         System.out.println("\nStop Timer");
         System.out.println("\nConcurrent activity generation took " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n" );
     }

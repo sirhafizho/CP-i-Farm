@@ -17,7 +17,7 @@ public class Farmer implements Runnable {
     private String phoneNumber;
     private String[] farms;
 
-    private Counter counter_id;
+    // private Counter counter_id;
     private Activity[][] activities;
 
     // Initailize a convenient Random object
@@ -78,9 +78,9 @@ public class Farmer implements Runnable {
     }
 
 
-    public void setCounter(Counter counter) {
-        this.counter_id = counter;
-    }
+    // public void setCounter(Counter counter) {
+    //     this.counter_id = counter;
+    // }
 
     public Activity[][] getActivities() {
         return this.activities;
@@ -134,7 +134,7 @@ public class Farmer implements Runnable {
 
         // For each farm that the current farmer is employed by
         for(int i = 0; i < farms.length; i++) {
-            int numOfActivity = 1 + randomC.nextInt(12);
+            int numOfActivity = randomC.nextInt(15) + 1;
             this.activities[i] = new Activity[numOfActivity];
 
             String[] plants = new String[0];
@@ -268,7 +268,8 @@ public class Farmer implements Runnable {
                         System.out.println(e.getMessage());
                     }
                 }
-                this.activities[i][j] = new Activity(Integer.toString(counter_id.getAndIncrement()),date,action,type,unit,quantity,field,row,Integer.parseInt(farms[i]),Integer.parseInt(this._id));
+                String tempid = "";
+                this.activities[i][j] = new Activity(tempid,date,action,type,unit,quantity,field,row,Integer.parseInt(farms[i]),Integer.parseInt(this._id));
             }
         }
     }
