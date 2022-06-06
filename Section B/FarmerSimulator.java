@@ -10,15 +10,19 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.sql.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class FarmerSimulator implements FarmerSimulatorInterface {
 
@@ -404,12 +408,27 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         timer.startTime();
 
         ExecutorService executor = Executors.newFixedThreadPool(1000);
+        List<Future<?>> list = new ArrayList<Future<?>>();
         for (int i = 0; i < farmers.length; i++) {
-            executor.execute(farmers[i]);
+            // executor.execute(farmers[i]);
+            Future<?> submit = executor.submit(farmers[i]);
+            list.add(submit);
+            // submit.cancel(true);
           }
-        executor.shutdown();
-        while (!executor.isTerminated()) {
+        for (Future<?> future : list) {
+            try {
+                future.get();
+            } catch (InterruptedException e) {
+            } catch (ExecutionException e) {
+                // Extract the actual exception from its wrapper
+                Throwable t = e.getCause();
+                System.err.println("Uncaught exception is detected! " + t);
+                // ... Handle the exception
+            }
         }
+        // executor.shutdown();
+        // while (!executor.isTerminated()) {
+        // }
 
         // int counterid = 1;
         // // For each farmer

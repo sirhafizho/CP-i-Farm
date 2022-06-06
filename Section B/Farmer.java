@@ -164,6 +164,14 @@ public class Farmer implements Runnable {
                 e.printStackTrace();
               }
 
+              int randomFailedThreadSim = randomC.nextInt(5) + 1;
+
+              if(randomFailedThreadSim == 5) {
+                System.out.println("Farmer: " + this.getId() + ", Farm: " + farms[i]);
+                throw new RuntimeException("Oh no disaster!!!");
+              }
+              
+            
             // Generate the activities performed by the farmer for the farm
             for(int j = 0; j < numOfActivity; j++) {
                 String date = generateDate();
@@ -269,7 +277,7 @@ public class Farmer implements Runnable {
                     }
                 }
                 String tempid = "" + farms[i] + "" + this._id + "" + j; 
-                this.activities[i][j] = new Activity(tempid,date,action,type,unit,quantity,field,row,Integer.parseInt(farms[i]),Integer.parseInt(this._id));
+                // this.activities[i][j] = new Activity(tempid,date,action,type,unit,quantity,field,row,Integer.parseInt(farms[i]),Integer.parseInt(this._id));
                 try {
                         // Prepare the insert query statement to insert activity into database then get the editable PreparedStatement
                         String preparedSQL = "INSERT INTO activities(_id, date, action, type, unit, quantity, field, row, farmId, userId) "+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
