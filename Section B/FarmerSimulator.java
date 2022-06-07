@@ -3,10 +3,9 @@
 */
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,66 +36,76 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     Statement stmt = mysqlCon.conn();
 
     // This method generates a number of farmers
-    public Farmer[] generateFarmers(int numberOfFarmers)
-    {   
-        // Prepare variables required for the generation of the details of the farmers
+    public Farmer[] generateFarmers(int numberOfFarmers) {
+
+        // Create array to store generated farmer
         Farmer[] farmers = new Farmer[numberOfFarmers];
         
-        final int PASSWORD_LENGTH = 8;
+        // This variable is used to create a random string as password for a farmer
         String alphanumericCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
+
+        // Fix the farmer's password length
+        final int PASSWORD_LENGTH = 8;
+
+        //  Fix the maximum number of farms a farmer can be employed by
         final int MAX_FARM_NUMBER = 5;
+
+        // Binary tree data structure is used to insert sort farms for a farmer
         BinaryTree binaryTree = null;
+
+        // Prepare SQL string statement to store generated farmers in database
         String preparedSQL = "INSERT INTO Users(_id, name, email, password, phoneNumber, farms) "+ "VALUES(?,?,?,?,?,?)";
-        try {            
-            // preparing the insert query to insert farmer into database
-            PreparedStatement pstmt = mysqlCon.getCon().prepareStatement(preparedSQL);      
-            // Generate farmers
+
+        try {
+
+            // Preparing the insert query to insert farmer into database
+            PreparedStatement pstmt = mysqlCon.getCon().prepareStatement(preparedSQL);
+
+            // Arrays to hold first names and last names
+            String[] firstNames = new String[100];
+            String[] lastNames = new String[100];
+
+            // Create FileReader object for FirstName.txt and LastName.txt
+            FileReader firstNameFR = new FileReader("./DummyDataGeneration/Farmers/FirstNames.txt");
+            FileReader lastNameFR = new FileReader("./DummyDataGeneration/Farmers/LastNames.txt");
+
+            // Open stream to FileReader objects
+            Scanner firstNamesS = new Scanner(firstNameFR);
+            Scanner lastNamesS = new Scanner(lastNameFR);
+
+            // Get first names and last names
+            for(int i = 0; i < 100; i++) {
+                firstNames[i] = firstNamesS.nextLine();
+                lastNames[i] = lastNamesS.nextLine();
+            }
+
+            // Close streams
+            firstNameFR.close();
+            lastNameFR.close();
+            firstNamesS.close();
+            lastNamesS.close();
+
+            // For each farmer to be generated
             for(int i = 0; i < farmers.length; i++) {
-                // Generate the detail of the current farmer
-                String id = Integer.toString(i + 1);
-                String name = null;
-                try {
-                    // Initalize the URL object for the API
-                    URL url = new URL("https://api.namefake.com/english-united-states");
 
-                    // Establish connection with the API
-                    HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                    conn.setRequestMethod("GET");
-                    conn.connect();
+                // Determine the _id of current farmer
+                String _id = Integer.toString(i + 1);
 
-                    // Get response code of the API call
-                    int responseCode = conn.getResponseCode();
+                // Determine the name of current farmer
+                String name = firstNames[random.nextInt(100)] + " " + lastNames[random.nextInt(100)];
 
-                    if(responseCode != 200)
-                        throw new RuntimeException("HttpResponseCode: " + responseCode);
-                    else
-                    {
-                        // Initalize the string builder object and scanner object
-                        StringBuilder sb = new StringBuilder();
-                        Scanner scanner = new Scanner(url.openStream());
-                            
-                        // While there is still information to read from the API call
-                        while(scanner.hasNext())
-                            // Append the information to the string builder object
-                            sb.append(scanner.nextLine());
+                // Determine the email of current farmer
+                String email = name.replaceAll("\\s+", "").toLowerCase() + _id + "@gmail.com";
 
-                        // Close the scanner object
-                        scanner.close();
-
-                        // Get the name from the JSON response
-                        name = sb.substring(9, sb.indexOf("\"", 9));
-                    }
-                } catch (Exception e) {
-                    // TODO: Do something with the error
-                    System.out.println("Name API didn't work");
-                    System.exit(1);
-                }
-
-                String email = name.replaceAll("\\s+", "").toLowerCase() + id + "@gmail.com";
+                // Determine the password of current farmer
                 String password = "";
                 for(int j = 0; j < PASSWORD_LENGTH; j++)
                     password += alphanumericCharacters.charAt(random.nextInt(alphanumericCharacters.length()));
+
+                // Determine the phoneNumber of current farmer
                 String phoneNumber = "01" + Integer.toString(random.nextInt(10)) + "-" + Integer.toString(1000000 + random.nextInt(9000000));
+
+                // Determine the farms the current farmer is employed by
                 String[] farms = new String[1 + random.nextInt(MAX_FARM_NUMBER)];
                 binaryTree = new BinaryTree();
                 while(binaryTree.getSize() < farms.length)
@@ -104,24 +113,27 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
                 farms = binaryTree.toStringArray();
 
 
-                System.out.println("Adding farmer "+id);
-                pstmt.setString(1, id);
+                System.out.println("Adding farmer " + _id);
+
+                // Insert current farmer into database
+                pstmt.setString(1, _id);
                 pstmt.setString(2, name);
                 pstmt.setString(3, email);
                 pstmt.setString(4, password);
                 pstmt.setString(5, phoneNumber);
                 pstmt.setString(6, Arrays.toString(farms));
                 pstmt.executeUpdate();
-                farmers[i] = new Farmer(id, name, email, password, phoneNumber, farms);
-            }
 
-        } catch(SQLException e){
+                // Save the generated farmer in an array
+                farmers[i] = new Farmer(_id, name, email, password, phoneNumber, farms);
+            }
+        } 
+        // Catch SQLException or IOException
+        catch(SQLException | IOException e) {
+
+            // Display error message
             System.out.println(e.getMessage());
         } 
-        // finally{
-        //     System.out.println("Closing database connection");
-        //     mysqlCon.closeConn();
-        // }
 
         return farmers;
     }
