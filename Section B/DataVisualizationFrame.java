@@ -398,9 +398,11 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         String type = chosenTypeComboBox.getSelectedItem().toString();
         Date startDate = dateACalendar.getDate();
         Date endDate = dateBCalendar.getDate();
+
         String field = fieldComboBox.getSelectedItem().toString();
         String row = rowComboBox.getSelectedItem().toString();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
         if(display1.isSelected()){
             String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarm(farm));
             outputTextArea.setText("");
@@ -418,8 +420,6 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
             if(startDate.before(endDate)){
                 String fromDate = dateFormat.format(startDate);
                 String toDate = dateFormat.format(endDate);
-                System.out.println(fromDate);
-                System.out.println(toDate);
                 String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmTypeDate(farm, type, fromDate, toDate));
                 outputTextArea.setText("");
                 outputTextArea.setText(activityLog);

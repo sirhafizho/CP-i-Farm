@@ -126,7 +126,7 @@ public class DataVisualization {
         try {
             // Get activities based on farm id & type of plant / fertilizer / pesticide
             String sqlQuery = String.format(
-                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date BETWEEN '%s' AND '%s' ORDER BY date ASC",
+                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' ORDER BY date ASC",
                     farmID, type, fromDate, toDate);
             rs = stmt.executeQuery(sqlQuery);
             // printActivityLog(rs);
@@ -137,13 +137,14 @@ public class DataVisualization {
         return rs;
     }
 
-    public ResultSet displayActivityLogsFarmTypeDateFieldRow(String farmID, String type, String fromDate, String toDate,
-            String fieldNumber, String rowNumber) {
+    public ResultSet displayActivityLogsFarmTypeDateFieldRow(String farmID, String type, String fromDate, String toDate, String fieldNumber, String rowNumber) {
         ResultSet rs = null;
         try {
+            System.out.println("Field Number "+Integer.parseInt(fieldNumber));
+            System.out.println("Row Number "+Integer.parseInt(rowNumber));
             // Get activities based on farm id, type of plant / fertilizer / pesticide, start date, end date, field number & row number
             String sqlQuery = String.format(
-                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date BETWEEN '%s' AND '%s' AND field = %d AND row = %d ORDER BY date ASC",
+                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' AND field = %d AND row = %d ORDER BY date ASC",
                     farmID, type, fromDate, toDate, Integer.parseInt(fieldNumber), Integer.parseInt(rowNumber));
             rs = stmt.executeQuery(sqlQuery);
             // printSummarizedActivityLog(rs);
