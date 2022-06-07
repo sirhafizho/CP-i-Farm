@@ -6,7 +6,10 @@
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 
@@ -30,14 +33,15 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         initComponents();
     
         // get the values from DB to be displayed to users
-        farmList = Arrays.asList("farm 1", "farm 2", "farm 3");
-        farmerList = Arrays.asList("farmer 1", "farmer 2", "farmer 3");
+        DataVisualization visualization = new DataVisualization();
+        farmList = visualization.getFarmsFarmer("farms");
+        farmerList = visualization.getFarmsFarmer("farmer");
         choiceList = Arrays.asList("Plant", "Fertilizer", "Pesticide");
-        plantList = Arrays.asList("plant 1", "plant 2", "plant 3");
-        fertilizerList = Arrays.asList("fertilizer 1", "fertilizer 2", "fertilizer 3");
-        pesticideList = Arrays.asList("pesticide 1", "pesticide 2", "pesticide 3");
-        rowList = Arrays.asList("1", "2", "3");
-        fieldList = Arrays.asList("1", "2", "3");
+        plantList = visualization.getChoice("plants");
+        fertilizerList = visualization.getChoice("fertilizers");
+        pesticideList = visualization.getChoice("pesticides");;
+        rowList = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+        fieldList = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
         
         // wrap the combobox in decorator class
         JComboBoxDecorator.decorate(farmComboBox, true, farmList); 
@@ -388,6 +392,54 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
 
     private void displayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayButtonActionPerformed
         // TODO add your handling code here:
+        DataVisualization visualization = new DataVisualization();
+        String farmer = farmerComboBox.getSelectedItem().toString();
+        String farm = farmComboBox.getSelectedItem().toString();
+        String type = chosenTypeComboBox.getSelectedItem().toString();
+        Date startDate = dateACalendar.getDate();
+        Date endDate = dateBCalendar.getDate();
+        String field = fieldComboBox.getSelectedItem().toString();
+        String row = rowComboBox.getSelectedItem().toString();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
+        if(display1.isSelected()){
+            String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarm(farm));
+            outputTextArea.setText("");
+            outputTextArea.setText(activityLog);
+        } else if(display2.isSelected()){
+            String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmer(farmer));
+            outputTextArea.setText("");
+            outputTextArea.setText(activityLog);
+        } else if(display3.isSelected()){
+            String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmType(farm, type));
+            outputTextArea.setText("");
+            outputTextArea.setText(activityLog);
+        } else if(display4.isSelected()){
+            
+            if(startDate.before(endDate)){
+                String fromDate = dateFormat.format(startDate);
+                String toDate = dateFormat.format(endDate);
+                System.out.println(fromDate);
+                System.out.println(toDate);
+                String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmTypeDate(farm, type, fromDate, toDate));
+                outputTextArea.setText("");
+                outputTextArea.setText(activityLog);
+            } else {
+                outputTextArea.setText("");
+                outputTextArea.setText("Invalid date choices (start date should be lower than end date)");
+            }
+        } else if(display5.isSelected()){
+            if(startDate.before(endDate)){
+                String fromDate = dateFormat.format(startDate);
+                String toDate = dateFormat.format(endDate);
+                String activityLog = visualization.printSummarizedActivityLog(visualization.displayActivityLogsFarmTypeDateFieldRow(farm, type, fromDate, toDate, field, row));
+                outputTextArea.setText("");
+                outputTextArea.setText(activityLog);
+            } else {
+                outputTextArea.setText("");
+                outputTextArea.setText("Invalid date choices (start date should be lower than end date)");
+            }
+        }
+        exportOutput.setEnabled(true);
     }//GEN-LAST:event_displayButtonActionPerformed
 
     private void display1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_display1ActionPerformed

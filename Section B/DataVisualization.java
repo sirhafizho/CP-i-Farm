@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataVisualization {
     // Initializing the mysql connection class
@@ -78,7 +80,7 @@ public class DataVisualization {
                     " WHERE farmId = " + farmID +
                     " ORDER BY date ASC";
             rs = stmt.executeQuery(sqlQuery);
-            printActivityLog(rs);
+            // printActivityLog(rs);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -94,7 +96,7 @@ public class DataVisualization {
                     " WHERE userId = " + farmerID +
                     " ORDER BY date ASC";
             rs = stmt.executeQuery(sqlQuery);
-            printActivityLog(rs);
+            // printActivityLog(rs);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -111,7 +113,7 @@ public class DataVisualization {
                     " AND LOWER(type) = LOWER('" + type + "')" +
                     " ORDER BY date ASC";
             rs = stmt.executeQuery(sqlQuery);
-            printActivityLog(rs);
+            // printActivityLog(rs);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -124,10 +126,10 @@ public class DataVisualization {
         try {
             // Get activities based on farm id & type of plant / fertilizer / pesticide
             String sqlQuery = String.format(
-                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' ORDER BY date ASC",
+                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date BETWEEN '%s' AND '%s' ORDER BY date ASC",
                     farmID, type, fromDate, toDate);
             rs = stmt.executeQuery(sqlQuery);
-            printActivityLog(rs);
+            // printActivityLog(rs);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -141,10 +143,10 @@ public class DataVisualization {
         try {
             // Get activities based on farm id, type of plant / fertilizer / pesticide, start date, end date, field number & row number
             String sqlQuery = String.format(
-                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' AND field = %d AND row = %d ORDER BY date ASC",
+                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date BETWEEN '%s' AND '%s' AND field = %d AND row = %d ORDER BY date ASC",
                     farmID, type, fromDate, toDate, Integer.parseInt(fieldNumber), Integer.parseInt(rowNumber));
             rs = stmt.executeQuery(sqlQuery);
-            printSummarizedActivityLog(rs);
+            // printSummarizedActivityLog(rs);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -152,10 +154,11 @@ public class DataVisualization {
         return rs;
     }
 
-    public void printActivityLog(ResultSet rs) {
+    public String printActivityLog(ResultSet rs) {
+        String output = ""; 
         try {
-            if (rs == null) {
-                System.out.println("\nNo records found");
+            if (!rs.isBeforeFirst()) {
+                output += "No records found";
             } else {
                 while (rs.next()) {
                     String action = rs.getString("action");
@@ -166,19 +169,21 @@ public class DataVisualization {
                     String unit = rs.getString("unit");
                     Date date = rs.getDate("date");
 
-                    System.out.println(action + " " + type + " Field " + field + " Row " + row + " " + quantity + " "
-                            + unit + " " + date.toString());
+                    output +=  action + " " + type + " Field " + field + " Row " + row + " " + quantity + " "
+                    + unit + " " + date.toString() + "\n\n";
                 }
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
+        return output;
     }
 
-    public void printSummarizedActivityLog(ResultSet rs) {
+    public String printSummarizedActivityLog(ResultSet rs) {
+        String output = "";
         try {
-            if (rs == null) {
-                System.out.println("\nNo records found");
+            if (!rs.isBeforeFirst()) {
+                output += "No records found";
             } else {
                 int quantitySum = 0;
                 String action = rs.getString("action");
@@ -192,9 +197,68 @@ public class DataVisualization {
                 }
 
                 System.out.println(action + " " + type + " Field " + field + " Row " + row + " " + quantitySum + " " + unit + " ");
+
+                output += action + " " + type + " Field " + field + " Row " + row + " " + quantitySum + " " + unit + " \n\n";
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
         }
+
+        return output;
     }
+
+    public List<String> getFarmsFarmer(String queryType) {
+        String sqlQuery = "";
+        if(queryType == "farmer"){
+            sqlQuery = "SELECT _id FROM users" +
+                    " ORDER BY _id ASC";
+        } else {
+            sqlQuery = "SELECT _id FROM farms" +
+                    " ORDER BY _id ASC";
+        }
+        ResultSet rs = null;
+        List<String> ids = new ArrayList<String>();
+        try {
+            rs = stmt.executeQuery(sqlQuery);
+            
+            while(rs.next()){
+                ids.add(rs.getString(("_id")));
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+
+        return ids;
+    }
+
+    public List<String> getChoice(String queryType) {
+        String sqlQuery = "";
+        if(queryType == "plants"){
+            sqlQuery = "SELECT name FROM plants" +
+                    " ORDER BY name ASC";
+        } else if(queryType == "fertilizers") {
+            sqlQuery = "SELECT name FROM fertilizers" +
+                    " ORDER BY name ASC";
+        } else {
+            sqlQuery = "SELECT name FROM pesticides" +
+                    " ORDER BY name ASC";
+        }
+        ResultSet rs = null;
+        List<String> names = new ArrayList<String>();
+        try {
+            rs = stmt.executeQuery(sqlQuery);
+            
+            while(rs.next()){
+                names.add(rs.getString(("name")));
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+
+        return names;
+    }
+
+
 }

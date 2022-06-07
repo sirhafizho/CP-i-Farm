@@ -30,30 +30,30 @@ public class DriverClass {
         Farmer[] farmers = simulator.generateFarmers(4);
 
         // // SEQUENTIAL PART
-        // createNewSeqLog();
-        // // start timer
-        // System.out.println("\nSequential Activity Generation Starts");
-        // System.out.println("\nStart Timer");
-        // Timer timer = new Timer();
-        // timer.startTime();
-        // // sequential activity generation here
-        // for (Farmer farmer : farmers) {
-        //     /*
-        //         Idea to use the farmer simulator class and add a sequential activity generation method
-        //         which accepts a Farmer as its parameter to generate the activities for the farmer
-        //     */
-        //     simulator.sequentialActivityGenerate(farmer);
-        // }
-        // // stop timer and print time taken for sequential approach
-        // timer.endTime();
-        // System.out.println("\nStop Timer");
-        // System.out.println("\nTime taken for dummy farmers' simulation using sequential approach: " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n");
+        createNewSeqLog();
+        // start timer
+        System.out.println("\nSequential Activity Generation Starts");
+        System.out.println("\nStart Timer");
+        Timer timer = new Timer();
+        timer.startTime();
+        // sequential activity generation here
+        for (Farmer farmer : farmers) {
+            /*
+                Idea to use the farmer simulator class and add a sequential activity generation method
+                which accepts a Farmer as its parameter to generate the activities for the farmer
+            */
+            simulator.sequentialActivityGenerate(farmer);
+        }
+        // stop timer and print time taken for sequential approach
+        timer.endTime();
+        System.out.println("\nStop Timer");
+        System.out.println("\nTime taken for dummy farmers' simulation using sequential approach: " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n");
 
-        // this is the data visualization section
-        // DataVisualization visualize = new DataVisualization();
+        //this is the data visualization section
+        DataVisualization visualize = new DataVisualization();
         
-        // // calling the process activities method to process the activities 
-        // visualize.processActivities();
+        // calling the process activities method to process the activities 
+        visualize.processActivities();
 
         // // cli commands starts here
         // int input = 0;
@@ -180,18 +180,18 @@ public class DriverClass {
         // s.close();
             
         
-        // UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        // //to display the frame
-        // DataVisualizationFrame frame = new DataVisualizationFrame();
-        // frame.setTitle("i-Farm Data Visualization");
-        // frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-        // frame.setVisible(true);
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        //to display the frame
+        DataVisualizationFrame frame = new DataVisualizationFrame();
+        frame.setTitle("i-Farm Data Visualization");
+        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
-        try {
-            simulator.concurrentActivityGeneration(farmers);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        // try {
+        //     simulator.concurrentActivityGeneration(farmers);
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
 
     }
 
