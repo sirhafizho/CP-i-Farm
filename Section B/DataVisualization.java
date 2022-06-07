@@ -139,7 +139,7 @@ public class DataVisualization {
             String fieldNumber, String rowNumber) {
         ResultSet rs = null;
         try {
-            // Get activities based on farm id & type of plant / fertilizer / pesticide
+            // Get activities based on farm id, type of plant / fertilizer / pesticide, start date, end date, field number & row number
             String sqlQuery = String.format(
                     "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' AND field = %d AND row = %d ORDER BY date ASC",
                     farmID, type, fromDate, toDate, Integer.parseInt(fieldNumber), Integer.parseInt(rowNumber));
