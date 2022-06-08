@@ -331,6 +331,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         );
 
         outputTextArea.setBackground(new java.awt.Color(211, 206, 196));
+        outputTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         outputTextArea.setColumns(20);
         outputTextArea.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         outputTextArea.setRows(5);
