@@ -1,5 +1,3 @@
-// TODO: Just adapt an array instead of using the built in linked list
-
 /*
     This class defines the BinaryTree data structure implementation
 */
@@ -19,7 +17,7 @@ public class BinaryTree {
             this.root = addProcess(this.root, value);
         }
         catch(NumberFormatException e) {
-            // TODO: Write to error logs
+            e.printStackTrace();
         }
         
     }
@@ -33,15 +31,15 @@ public class BinaryTree {
         }
 
         // Convert the values into integer
-        int baseValue = Integer.parseInt(currentNode.value);
+        int baseValue = Integer.parseInt(currentNode.getValue());
         int targetValue = Integer.parseInt(value);
 
         // Traverse through the binary tree
         if (targetValue < baseValue) {
-            currentNode.left = addProcess(currentNode.left, value);
+            currentNode.setLeft(addProcess(currentNode.getLeft(), value));
         } 
         else if (targetValue > baseValue) {
-            currentNode.right = addProcess(currentNode.right, value);
+            currentNode.setRight(addProcess(currentNode.getRight(), value));
         }
 
         // If there is duplicate value, don't insert the value into the binary tree
@@ -69,9 +67,9 @@ public class BinaryTree {
     public void toStringArrayProcess(Node node, LinkedList<String> list) {
         // Traverse throught the binary tree in order
         if (node != null) {
-            toStringArrayProcess(node.left, list);
-            list.add(node.value);
-            toStringArrayProcess(node.right, list);
+            toStringArrayProcess(node.getLeft(), list);
+            list.add(node.getValue());
+            toStringArrayProcess(node.getRight(), list);
         }
     }
 }
