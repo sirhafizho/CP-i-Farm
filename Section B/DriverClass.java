@@ -12,7 +12,7 @@ import java.io.FileWriter;
 
 public class DriverClass {
 
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public static void main(String[] args) {
 
         checkDB();
 
@@ -171,7 +171,7 @@ public class DriverClass {
         // s.close();
             
         
-        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        
         //to display the frame
         DataVisualizationFrame frame = new DataVisualizationFrame();
         frame.setTitle("i-Farm Data Visualization");
