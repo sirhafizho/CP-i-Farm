@@ -407,6 +407,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         // Create new concurrent activity log
         try {
             FileWriter myWriter = new FileWriter("Concurrent Activity Log.txt");
+            myWriter.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

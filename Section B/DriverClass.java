@@ -1,13 +1,4 @@
-import java.sql.Date;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.InputMismatchException;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -270,6 +261,7 @@ public class DriverClass {
         // create new sequential activity log
         try {
             FileWriter myWriter = new FileWriter("Sequential Activity Log.txt");
+            myWriter.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
