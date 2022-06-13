@@ -143,13 +143,13 @@ public class Farmer implements Runnable {
         // For each farm that the current farmer is employed by
         for(int i = 0; i < farms.length; i++) {
 
-            // throw exception error randomly
-              int randomFailedThreadSim = randomC.nextInt(5) + 1;
+            // throw exception error randomly for each farm 
+            //   int randomFailedThreadSim = randomC.nextInt(5) + 1;
 
-              if(randomFailedThreadSim == 5) {
-                System.out.println("Farmer " + this.getId() + " fails to generate activities for Farm: " + farms[i]);
-                throw new RuntimeException("Oh no disaster!!!");
-              }
+            //   if(randomFailedThreadSim == 5) {
+            //     System.out.println("Farmer " + this.getId() + " fails to generate activities for Farm: " + farms[i]);
+            //     throw new RuntimeException("Oh no disaster!!!");
+            //   }
 
             int numOfActivity = randomC.nextInt(500) + 1;
             this.activities[i] = new Activity[numOfActivity];
