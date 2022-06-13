@@ -132,16 +132,25 @@ public class Farmer implements Runnable {
     @Override
     public void run() {
 
-        //Thorw exception error randomly
-        int randomFailedThreadSim = randomC.nextInt(4) + 1;
+        //Throw exception error randomly
+        // int randomFailedThreadSim = randomC.nextInt(3) + 1;
 
-              if(randomFailedThreadSim == 2) {
-                System.out.println("Farmer " + this.getId() + " fails to generate activities." );
-                throw new RuntimeException("Oh no disaster!!!");
-              }
+        //       if(randomFailedThreadSim == 2) {
+        //         System.out.println("Farmer " + this.getId() + " fails to generate activities." );
+        //         throw new RuntimeException("Oh no disaster!!!");
+        //       }
 
         // For each farm that the current farmer is employed by
         for(int i = 0; i < farms.length; i++) {
+
+            // throw exception error randomly
+              int randomFailedThreadSim = randomC.nextInt(5) + 1;
+
+              if(randomFailedThreadSim == 5) {
+                System.out.println("Farmer " + this.getId() + " fails to generate activities for Farm: " + farms[i]);
+                throw new RuntimeException("Oh no disaster!!!");
+              }
+
             int numOfActivity = randomC.nextInt(500) + 1;
             this.activities[i] = new Activity[numOfActivity];
 
@@ -171,13 +180,6 @@ public class Farmer implements Runnable {
                 System.out.println("An error occurred.");
                 e.printStackTrace();
               }
-
-            //   int randomFailedThreadSim = randomC.nextInt(5) + 1;
-
-            //   if(randomFailedThreadSim == 5) {
-            //     System.out.println("Farmer: " + this.getId() + ", Farm: " + farms[i]);
-            //     throw new RuntimeException("Oh no disaster!!!");
-            //   }
               
             
             // Generate the activities performed by the farmer for the farm

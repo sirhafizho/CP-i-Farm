@@ -466,7 +466,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         // try{
             while(!threadPool.isTerminated()){         
              }
-            threadPool.shutdown();
+            threadPool.shutdownNow();
         // }catch(InterruptedException ex){
         //        threadPool.shutdownNow();
         //         Thread.currentThread().interrupt(); 
