@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -12,6 +11,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -33,23 +34,23 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         initComponents();
     
         // get the values from DB to be displayed to users
-        DataVisualization visualization = new DataVisualization();
-        farmList = visualization.getFarmsFarmer("farms");
-        farmerList = visualization.getFarmsFarmer("farmer");
-        choiceList = Arrays.asList("Plant", "Fertilizer", "Pesticide");
-        plantList = visualization.getChoice("plants");
-        fertilizerList = visualization.getChoice("fertilizers");
-        pesticideList = visualization.getChoice("pesticides");;
-        rowList = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-        fieldList = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-        
-        // wrap the combobox in decorator class
-        JComboBoxDecorator.decorate(farmComboBox, true, farmList); 
-        JComboBoxDecorator.decorate(farmerComboBox, true, farmerList); 
-        JComboBoxDecorator.decorate(choiceComboBox, true, choiceList); 
-        JComboBoxDecorator.decorate(chosenTypeComboBox, true, plantList);
-        JComboBoxDecorator.decorate(rowComboBox, true, rowList);
-        JComboBoxDecorator.decorate(fieldComboBox, true, fieldList);
+       DataVisualization visualization = new DataVisualization();
+       farmList = visualization.getFarmsFarmer("farms");
+       farmerList = visualization.getFarmsFarmer("farmer");
+       choiceList = Arrays.asList("Plant", "Fertilizer", "Pesticide");
+       plantList = visualization.getChoice("plants");
+       fertilizerList = visualization.getChoice("fertilizers");
+       pesticideList = visualization.getChoice("pesticides");;
+       rowList = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+       fieldList = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+       
+       // wrap the combobox in decorator class
+       JComboBoxDecorator.decorate(farmComboBox, true, farmList); 
+       JComboBoxDecorator.decorate(farmerComboBox, true, farmerList); 
+       JComboBoxDecorator.decorate(choiceComboBox, true, choiceList); 
+       JComboBoxDecorator.decorate(chosenTypeComboBox, true, plantList);
+       JComboBoxDecorator.decorate(rowComboBox, true, rowList);
+       JComboBoxDecorator.decorate(fieldComboBox, true, fieldList);
     }
 
     /**
@@ -62,6 +63,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         display1 = new javax.swing.JRadioButton();
         display2 = new javax.swing.JRadioButton();
@@ -76,7 +78,6 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         rowComboBox = new javax.swing.JComboBox<>();
         jLabel81 = new javax.swing.JLabel();
-        chosenTypeComboBox = new javax.swing.JComboBox<>();
         displayButton = new javax.swing.JButton();
         dateACalendar = new com.toedter.calendar.JCalendar();
         jLabel5 = new javax.swing.JLabel();
@@ -87,6 +88,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         choiceComboBox = new javax.swing.JComboBox<>();
         fieldComboBox = new javax.swing.JComboBox<>();
         exportOutput = new javax.swing.JButton();
+        chosenTypeComboBox = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         outputTextArea = new javax.swing.JTextArea();
 
@@ -181,10 +183,6 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         jLabel81.setForeground(new java.awt.Color(255, 255, 255));
         jLabel81.setText("Row");
 
-        chosenTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        chosenTypeComboBox.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chosenTypeComboBox.setEnabled(false);
-
         displayButton.setBackground(new java.awt.Color(255, 255, 255));
         displayButton.setText("Display Logs");
         displayButton.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -210,9 +208,9 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         jLabel7.setText("Field");
 
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Plant");
+        jLabel8.setText("Fertilizer");
 
-        choiceComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        choiceComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Plant", "Fertilizer", "Pesticide" }));
         choiceComboBox.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         choiceComboBox.setEnabled(false);
         choiceComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -241,57 +239,55 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
             }
         });
 
+        chosenTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        chosenTypeComboBox.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chosenTypeComboBox.setEnabled(false);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(displayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(38, 38, 38)
-                                .addComponent(exportOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
-                                .addComponent(dateBCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel81))
+                        .addGap(34, 34, 34)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(farmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(choiceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel8))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(farmerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(chosenTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(rowComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel81)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(fieldComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(dateACalendar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(16, 16, 16))
+                                .addComponent(rowComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel7))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(farmComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel3)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel5)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dateBCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dateACalendar, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(choiceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(farmerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(chosenTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(fieldComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(16, 16, 16))))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(displayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(exportOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,32 +300,38 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(chosenTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8)
-                    .addComponent(choiceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
+                    .addComponent(rowComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel81)
                     .addComponent(fieldComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rowComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
+                    .addComponent(jLabel7))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(choiceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chosenTypeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dateACalendar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel6))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(dateBCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dateBCalendar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(exportOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(displayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(displayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(exportOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         outputTextArea.setBackground(new java.awt.Color(211, 206, 196));
+        outputTextArea.setDisabledTextColor(new java.awt.Color(0, 0, 0));
         outputTextArea.setColumns(20);
         outputTextArea.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         outputTextArea.setRows(5);
@@ -371,20 +373,20 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
+
+        jScrollPane2.setViewportView(jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1067, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
         );
 
         pack();
@@ -403,42 +405,42 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         String row = rowComboBox.getSelectedItem().toString();
         
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
-        if(display1.isSelected()){
-            String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarm(farm));
-            outputTextArea.setText("");
-            outputTextArea.setText(activityLog);
-        } else if(display2.isSelected()){
-            String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmer(farmer));
-            outputTextArea.setText("");
-            outputTextArea.setText(activityLog);
-        } else if(display3.isSelected()){
-            String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmType(farm, type));
-            outputTextArea.setText("");
-            outputTextArea.setText(activityLog);
-        } else if(display4.isSelected()){
-            
-            if(startDate.before(endDate)){
-                String fromDate = dateFormat.format(startDate);
-                String toDate = dateFormat.format(endDate);
-                String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmTypeDate(farm, type, fromDate, toDate));
-                outputTextArea.setText("");
-                outputTextArea.setText(activityLog);
-            } else {
-                outputTextArea.setText("");
-                outputTextArea.setText("Invalid date choices (start date should be lower than end date)");
-            }
-        } else if(display5.isSelected()){
-            if(startDate.before(endDate)){
-                String fromDate = dateFormat.format(startDate);
-                String toDate = dateFormat.format(endDate);
-                String activityLog = visualization.printSummarizedActivityLog(visualization.displayActivityLogsFarmTypeDateFieldRow(farm, type, fromDate, toDate, field, row));
-                outputTextArea.setText("");
-                outputTextArea.setText(activityLog);
-            } else {
-                outputTextArea.setText("");
-                outputTextArea.setText("Invalid date choices (start date should be lower than end date)");
-            }
-        }
+       if(display1.isSelected()){
+           String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarm(farm));
+           outputTextArea.setText("");
+           outputTextArea.setText(activityLog);
+       } else if(display2.isSelected()){
+           String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmer(farmer));
+           outputTextArea.setText("");
+           outputTextArea.setText(activityLog);
+       } else if(display3.isSelected()){
+           String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmType(farm, type));
+           outputTextArea.setText("");
+           outputTextArea.setText(activityLog);
+       } else if(display4.isSelected()){
+           
+           if(startDate.before(endDate)){
+               String fromDate = dateFormat.format(startDate);
+               String toDate = dateFormat.format(endDate);
+               String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmTypeDate(farm, type, fromDate, toDate));
+               outputTextArea.setText("");
+               outputTextArea.setText(activityLog);
+           } else {
+               outputTextArea.setText("");
+               outputTextArea.setText("Invalid date choices (start date should be lower than end date)");
+           }
+       } else if(display5.isSelected()){
+           if(startDate.before(endDate)){
+               String fromDate = dateFormat.format(startDate);
+               String toDate = dateFormat.format(endDate);
+               String activityLog = visualization.printSummarizedActivityLog(visualization.displayActivityLogsFarmTypeDateFieldRow(farm, type, fromDate, toDate, field, row));
+               outputTextArea.setText("");
+               outputTextArea.setText(activityLog);
+           } else {
+               outputTextArea.setText("");
+               outputTextArea.setText("Invalid date choices (start date should be lower than end date)");
+           }
+       }
         exportOutput.setEnabled(true);
     }//GEN-LAST:event_displayButtonActionPerformed
 
@@ -544,12 +546,13 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])  throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException{
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -604,6 +607,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea outputTextArea;
     private javax.swing.JComboBox<String> rowComboBox;
     // End of variables declaration//GEN-END:variables
