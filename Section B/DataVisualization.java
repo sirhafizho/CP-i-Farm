@@ -121,10 +121,11 @@ public class DataVisualization {
         return rs;
     }
 
+    // This method dispalys activity logs based on the specified farmID, type of materials used, start date, and end date
     public ResultSet displayActivityLogsFarmTypeDate(String farmID, String type, String fromDate, String toDate) {
         ResultSet rs = null;
         try {
-            // Get activities based on farm id & type of plant / fertilizer / pesticide
+            // Get activities from database based on farm id, type of plant / fertilizer / pesticide, start date, and end date
             String sqlQuery = String.format(
                     "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' ORDER BY date ASC",
                     farmID, type, fromDate, toDate);
@@ -137,12 +138,13 @@ public class DataVisualization {
         return rs;
     }
 
+    // This method dispalys activity logs based on the specified farmID, type of materials used, start date, end date, field number in the farm, row number in the field
     public ResultSet displayActivityLogsFarmTypeDateFieldRow(String farmID, String type, String fromDate, String toDate, String fieldNumber, String rowNumber) {
         ResultSet rs = null;
         try {
             System.out.println("Field Number "+Integer.parseInt(fieldNumber));
             System.out.println("Row Number "+Integer.parseInt(rowNumber));
-            // Get activities based on farm id, type of plant / fertilizer / pesticide, start date, end date, field number & row number
+            // Get activities from database based on farm id, type of plant / fertilizer / pesticide, start date, end date, field number & row number
             String sqlQuery = String.format(
                     "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' AND field = %d AND row = %d ORDER BY date ASC",
                     farmID, type, fromDate, toDate, Integer.parseInt(fieldNumber), Integer.parseInt(rowNumber));
@@ -260,6 +262,4 @@ public class DataVisualization {
 
         return names;
     }
-
-
 }

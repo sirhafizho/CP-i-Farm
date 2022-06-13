@@ -186,7 +186,6 @@ public class DriverClass {
 
     }
 
-
     public static void checkDB() {
         //initializing the mysql connection class
         MysqlCon mysqlCon = new MysqlCon();
