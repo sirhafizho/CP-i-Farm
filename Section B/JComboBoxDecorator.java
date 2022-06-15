@@ -13,10 +13,7 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.SwingUtilities;
-/**
- *
- * @author Kisyok Indran Veerasamy
- */
+
 public class JComboBoxDecorator {
     public static void decorate(final JComboBox jcb, boolean editable)
     {
