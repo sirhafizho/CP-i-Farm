@@ -51,6 +51,16 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
        JComboBoxDecorator.decorate(chosenTypeComboBox, true, plantList);
        JComboBoxDecorator.decorate(rowComboBox, true, rowList);
        JComboBoxDecorator.decorate(fieldComboBox, true, fieldList);
+
+       // to close db connection and exit the system when user clicks exit button on GUI
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                System.out.println("Closing DB connection and exiting system");
+                visualization.mysqlCon.closeConn();
+                System.exit(0);
+            }
+        });
+    
     }
 
     /**
@@ -393,7 +403,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void displayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayButtonActionPerformed
-        // TODO add your handling code here:
+        
         DataVisualization visualization = new DataVisualization();
         String farmer = farmerComboBox.getSelectedItem().toString();
         String farm = farmComboBox.getSelectedItem().toString();
@@ -517,7 +527,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_choiceComboBoxActionPerformed
 
     private void fieldComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldComboBoxActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_fieldComboBoxActionPerformed
 
     private void display5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_display5ActionPerformed

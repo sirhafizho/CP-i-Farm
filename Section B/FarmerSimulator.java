@@ -9,19 +9,53 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.sql.*;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+
+class MyThreadPoolExecutor extends ThreadPoolExecutor {
+    public MyThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime,
+            TimeUnit unit, BlockingQueue<Runnable> workQueue) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
+    }
+    
+    @Override
+    public void afterExecute(Runnable r, Throwable t) {
+        super.afterExecute(r, t);
+        // If submit() method is called instead of execute()
+        if (t == null && r instanceof Future<?>) {
+            try {
+                Object result = ((Future<?>) r).get();
+            } catch (CancellationException e) {
+                t = e;
+            } catch (ExecutionException e) {
+                t = e.getCause();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        if (t != null) {
+            // Exception occurred
+            System.err.println("Uncaught exception is detected! " + t
+                    + " st: " + Arrays.toString(t.getStackTrace()));
+            // ... Handle the exception
+            // Restart the runnable again
+            execute(r);
+        }
+        // ... Perform cleanup actions
+    }
+}
 
 public class FarmerSimulator implements FarmerSimulatorInterface {
 
@@ -420,25 +454,44 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         Timer timer = new Timer();
         timer.startTime();
 
-        ExecutorService executor = Executors.newFixedThreadPool(1000);
-        List<Future<?>> list = new ArrayList<Future<?>>();
-        for (int i = 0; i < farmers.length; i++) {
-            // executor.execute(farmers[i]);
-            Future<?> submit = executor.submit(farmers[i]);
-            list.add(submit);
-            // submit.cancel(true);
-          }
-        for (Future<?> future : list) {
-            try {
-                future.get();
-            } catch (InterruptedException e) {
-            } catch (ExecutionException e) {
-                // Extract the actual exception from its wrapper
-                Throwable t = e.getCause();
-                System.err.println("Uncaught exception is detected! " + t);
-                // ... Handle the exception
-            }
+        // Create a fixed thread pool executor
+        ExecutorService threadPool = new MyThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<>());
+        for(int i = 0; i<farmers.length; i++){
+            threadPool.execute(farmers[i]);
         }
+        threadPool.shutdown();
+        while(!threadPool.isTerminated()){         
+        }
+        
+        // // try{
+        //     // while(!threadPool.isTerminated()){         
+        //     //  }
+        //     threadPool.shutdown();
+        // // }catch(InterruptedException ex){
+        // //        threadPool.shutdownNow();
+        // //         Thread.currentThread().interrupt(); 
+        // // }
+
+        // ExecutorService executor = Executors.newFixedThreadPool(1000);
+        // List<Future<?>> list = new ArrayList<Future<?>>();
+        // for (int i = 0; i < farmers.length; i++) {
+        //     // executor.execute(farmers[i]);
+        //     Future<?> submit = executor.submit(farmers[i]);
+        //     list.add(submit);
+        //     // submit.cancel(true);
+        //   }
+        // for (Future<?> future : list) {
+        //     try {
+        //         future.get();
+        //     } catch (InterruptedException e) {
+        //     } catch (ExecutionException e) {
+        //         // Extract the actual exception from its wrapper
+        //         Throwable t = e.getCause();
+        //         System.err.println("Uncaught exception is detected! " + t);
+        //         // ... Handle the exception
+        //     }
+        // }
         // executor.shutdown();
         // while (!executor.isTerminated()) {
         // }

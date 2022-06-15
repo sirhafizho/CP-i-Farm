@@ -13,7 +13,6 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 /**
  *
  * @author Kisyok Indran Veerasamy
