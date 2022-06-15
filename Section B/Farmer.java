@@ -286,7 +286,7 @@ public class Farmer implements Runnable {
                         System.out.println(e.getMessage());
                     }
                 }
-                String tempid = "" + farms[i] + "" + this._id + "" + j; 
+                String tempid = "U" + farms[i] + "F" + this._id + "" + j; 
                 // this.activities[i][j] = new Activity(tempid,date,action,type,unit,quantity,field,row,Integer.parseInt(farms[i]),Integer.parseInt(this._id));
                 try {
                         // Prepare the insert query statement to insert activity into database then get the editable PreparedStatement
