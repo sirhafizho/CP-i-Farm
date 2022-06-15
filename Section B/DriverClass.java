@@ -1,7 +1,5 @@
 import java.sql.ResultSet;
 import java.util.concurrent.TimeUnit;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import java.sql.*;
 import java.io.File;
 import java.io.IOException;

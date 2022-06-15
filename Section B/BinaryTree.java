@@ -64,7 +64,7 @@ public class BinaryTree {
     }
 
     // This method handles the actual process of creating the sorted string array from the binary tree
-    public void toStringArrayProcess(Node node, LinkedList<String> list) {
+    private void toStringArrayProcess(Node node, LinkedList<String> list) {
         // Traverse throught the binary tree in order
         if (node != null) {
             toStringArrayProcess(node.getLeft(), list);

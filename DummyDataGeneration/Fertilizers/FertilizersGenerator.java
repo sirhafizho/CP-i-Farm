@@ -46,5 +46,4 @@ public class FertilizersGenerator {
         }
         return newList;
     }
-
 }
