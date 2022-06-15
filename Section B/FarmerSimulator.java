@@ -447,6 +447,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             e.printStackTrace();
         }
 
+        // << Normal Concurrent Activity Generation >>
         System.out.println("\nConcurrent Activity Generation Starts");
         System.out.println("\nStart Timer\n");
 
@@ -463,6 +464,34 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         threadPool.shutdown();
         while(!threadPool.isTerminated()){         
         }
+
+        // Stop the timer then display time it took for farmers to concurrently generate activities and to write the activities to the database
+        timer.endTime();
+        System.out.println("\nStop Timer");
+        System.out.println("\nConcurrent activity generation took " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n" );
+
+
+
+        // << Concurrent Activity Generation with disaster simulation >>
+        // System.out.println("\nConcurrent Activity Generation Starts");
+        
+        // // Create a fixed thread pool executor
+        // ExecutorService threadPool = new MyThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS,
+        //         new LinkedBlockingQueue<>());
+        // for(int i = 0; i<farmers.length; i++){
+        //     threadPool.execute(farmers[i]);
+        // }
+
+        // threadPool.awaitTermination(8, TimeUnit.SECONDS);
+        // threadPool.shutdown();
+
+
+
+
+
+
+
+
         
         // // try{
         //     // while(!threadPool.isTerminated()){         
@@ -535,9 +564,6 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         //     }
         // }
 
-        // Stop the timer then display time it took for farmers to concurrently generate activities and to write the activities to the database
-        timer.endTime();
-        System.out.println("\nStop Timer");
-        System.out.println("\nConcurrent activity generation took " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n" );
+        
     }
 }
