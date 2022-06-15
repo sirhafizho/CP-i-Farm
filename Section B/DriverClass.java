@@ -1,9 +1,6 @@
 import java.sql.ResultSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import java.sql.*;
 import java.io.File;
 import java.io.IOException;
@@ -17,44 +14,44 @@ public class DriverClass {
     public static void main(String[] args) {
 
         // Check the Database and reset
-        checkDB();
+        // checkDB();
 
-        // Initalise Farmer Simulator
-        FarmerSimulator simulator = new FarmerSimulator();
+        // // Initalise Farmer Simulator
+        // FarmerSimulator simulator = new FarmerSimulator();
 
-        // Generate Farmers
-        Farmer[] farmers = simulator.generateFarmers(4);
+        // // Generate Farmers
+        // Farmer[] farmers = simulator.generateFarmers(4);
 
-        // SEQUENTIAL PART
-        createNewSeqLog();
-        // start timer
-        System.out.println("\nSequential Activity Generation Starts");
-        System.out.println("\nStart Timer");
-        Timer timer = new Timer();
-        timer.startTime();
-        // sequential activity generation here
-        for (Farmer farmer : farmers) {
-            /*
-                Idea to use the farmer simulator class and add a sequential activity generation method
-                which accepts a Farmer as its parameter to generate the activities for the farmer
-            */
-            simulator.sequentialActivityGenerate(farmer);
-        }
-        // stop timer and print time taken for sequential approach
-        timer.endTime();
-        System.out.println("\nStop Timer");
-        System.out.println("\nTime taken for dummy farmers' simulation using sequential approach: " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n");
+        // // SEQUENTIAL PART
+        // createNewSeqLog();
+        // // start timer
+        // System.out.println("\nSequential Activity Generation Starts");
+        // System.out.println("\nStart Timer");
+        // Timer timer = new Timer();
+        // timer.startTime();
+        // // sequential activity generation here
+        // for (Farmer farmer : farmers) {
+        //     /*
+        //         Idea to use the farmer simulator class and add a sequential activity generation method
+        //         which accepts a Farmer as its parameter to generate the activities for the farmer
+        //     */
+        //     simulator.sequentialActivityGenerate(farmer);
+        // }
+        // // stop timer and print time taken for sequential approach
+        // timer.endTime();
+        // System.out.println("\nStop Timer");
+        // System.out.println("\nTime taken for dummy farmers' simulation using sequential approach: " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n");
 
-        //this is the data visualization section
-        DataVisualization visualize = new DataVisualization();
+        // //this is the data visualization section
+        // DataVisualization visualize = new DataVisualization();
         
-        // calling the process activities method to process the activities 
-        visualize.processActivities();
+        // // calling the process activities method to process the activities 
+        // visualize.processActivities();
 
         //to display the frame
         DataVisualizationFrame frame = new DataVisualizationFrame();
         frame.setTitle("i-Farm Data Visualization");
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        // frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
         // CONCURRENT PART
@@ -119,8 +116,8 @@ public class DriverClass {
             System.out.println("Creating new Activities table...");
             stmt.executeUpdate(createSQL);
             System.out.println("Activities table created..." + "\n");
-        } catch (Exception e) {
-            //TODO: handle exception
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
