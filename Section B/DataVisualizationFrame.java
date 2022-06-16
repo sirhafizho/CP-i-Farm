@@ -81,12 +81,12 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
             if(!shouldSearch)
                 return;
             if(sb.getValue() == sb.getMinimum())
-                System.out.println("top");
+                // System.out.println("top");
             if(sb.getValue() +sb.getVisibleAmount() == sb.getMaximum()){
                 if(shouldSearch){
-                    System.out.println("bottom"); 
+                    // System.out.println("bottom"); 
                     initValue += toLoad;
-                    System.out.println("loading data "+initValue+" to "+(initValue+toLoad));
+                    // System.out.println("loading data "+initValue+" to "+(initValue+toLoad));
                     getData();
                 }
                 
@@ -466,12 +466,12 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
        if(display1.isSelected()){
             if(initValue == 0){
-                System.out.println("setting search to true");
+                // System.out.println("setting search to true");
                 shouldSearch = true;
             }
            String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarm(farm, initValue, toLoad));
            if(activityLog == "No records found\n"){
-            System.out.println("setting search to false");
+            // System.out.println("setting search to false");
             shouldSearch = false;
            }
            outputTextArea.append(activityLog);
@@ -479,25 +479,25 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
            
        } else if(display2.isSelected()){
             if(initValue == 0){
-                System.out.println("setting search to true");
+                // System.out.println("setting search to true");
                 shouldSearch = true;
             }
            String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmer(farmer, initValue, toLoad));
            
            if(activityLog == "No records found\n"){
-            System.out.println("setting search to false");
+            // System.out.println("setting search to false");
             shouldSearch = false;
            }
            outputTextArea.append(activityLog);
        } else if(display3.isSelected()){
             if(initValue == 0){
-                System.out.println("setting search to true");
+                // System.out.println("setting search to true");
                 shouldSearch = true;
             }
            String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmType(farm, type, initValue, toLoad));
            
            if(activityLog == "No records found\n"){
-            System.out.println("setting search to false");
+            // System.out.println("setting search to false");
             shouldSearch = false;
            }
            outputTextArea.append(activityLog);
@@ -505,7 +505,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
             
            if(startDate.before(endDate)){
                 if(initValue == 0){
-                    System.out.println("setting search to true");
+                    // System.out.println("setting search to true");
                     shouldSearch = true;
                 }
                String fromDate = dateFormat.format(startDate);
@@ -513,7 +513,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
                String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmTypeDate(farm, type, fromDate, toDate, initValue, toLoad));
                
                if(activityLog == "No records found\n"){
-                System.out.println("setting search to false");
+                // System.out.println("setting search to false");
                 shouldSearch = false;
                }
                outputTextArea.append(activityLog);
@@ -524,7 +524,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
        } else if(display5.isSelected()){
            if(startDate.before(endDate)){
                 if(initValue == 0){
-                    System.out.println("setting search to true");
+                    // System.out.println("setting search to true");
                     shouldSearch = true;
                 }
                String fromDate = dateFormat.format(startDate);
@@ -532,7 +532,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
                String activityLog = visualization.printSummarizedActivityLog(visualization.displayActivityLogsFarmTypeDateFieldRow(farm, type, fromDate, toDate, field, row, initValue, toLoad));
                
                if(activityLog == "No records found\n"){
-                System.out.println("setting search to false");
+                // System.out.println("setting search to false");
                 shouldSearch = false;
                }
                outputTextArea.append(activityLog);
