@@ -152,7 +152,7 @@ public class Farmer implements Runnable {
             //     throw new RuntimeException("Oh no disaster!!!");
             //   }
 
-            int numOfActivity = randomC.nextInt(500) + 1;
+            int numOfActivity = randomC.nextInt(1000) + 1000;
             this.activities[i] = new Activity[numOfActivity];
 
             String[] plants = new String[0];

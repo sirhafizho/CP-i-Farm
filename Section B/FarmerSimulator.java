@@ -241,7 +241,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
             }
 
             // to get random number of activities
-            int numOfActivity = 10 + random.nextInt(1);
+            int numOfActivity = 1000 + random.nextInt(1000);
             System.out.println("Farmer " + farmer.getId() + " generates " + numOfActivity + " activities of random types for Farm " + farm);
 
             // Write the farmers’ sent operations and success operations into log file
