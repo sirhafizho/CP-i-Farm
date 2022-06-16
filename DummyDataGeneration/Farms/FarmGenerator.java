@@ -20,27 +20,21 @@ public class FarmGenerator {
 
         FileReader fr = new FileReader("./DummyDataGeneration/Farms/FarmsList.txt");
         Scanner inFile = new Scanner(fr);
-        while (inFile.hasNext())
-        {
+        while (inFile.hasNext()) {
             String line = inFile.nextLine();
             line = line.substring(1, line.length() - 1);
             data.add(line);
-
         }
         inFile.close();
-        // boundIndex for select in sub list
         int numberOfElements = 20;
         List<String[]> farms = getRandomElement(data, numberOfElements);
         writer.writeAll(farms);
         writer.close();
     }
 
-    public static List<String[]>
-    getRandomElement(List<String> list, int totalItems)
-    {
+    public static List<String[]> getRandomElement(List<String> list, int totalItems) {
         Random rand = new Random();
         List<String[]> newList = new ArrayList<>();
-        // newList.add(new String[] {"_id", "name", "unitType"});
         for (int i = 0; i < totalItems; i++) {
             int randomIndex = rand.nextInt(list.size());
             String[] newString = new String[] { (i+1) + "", list.get(randomIndex) + "" };
@@ -49,5 +43,4 @@ public class FarmGenerator {
         }
         return newList;
     }
-
 }
