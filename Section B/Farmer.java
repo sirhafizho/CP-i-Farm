@@ -23,9 +23,7 @@ public class Farmer implements Runnable {
     // Initailize a convenient Random object
     Random randomC = new Random();
 
-    //initializing the mysql connection class
-    MysqlCon mysqlCon = new MysqlCon();
-    Statement stmt = mysqlCon.conn();
+    
 
     Farmer(String _id, String name, String email, String password, String phoneNumber, String[] farms) {
         this._id = _id;
@@ -131,6 +129,9 @@ public class Farmer implements Runnable {
 
     @Override
     public void run() {
+        //initializing the mysql connection class
+        MysqlCon mysqlCon = new MysqlCon();
+        Statement stmt = mysqlCon.conn();
 
         //Throw exception error randomly
         // int randomFailedThreadSim = randomC.nextInt(3) + 1;
@@ -291,7 +292,7 @@ public class Farmer implements Runnable {
                 try {
                         // Prepare the insert query statement to insert activity into database then get the editable PreparedStatement
                         String preparedSQL = "INSERT INTO activities(_id, date, action, type, unit, quantity, field, row, farmId, userId) "+ "VALUES(?,?,?,?,?,?,?,?,?,?)";
-                        PreparedStatement preparedStatement = this.mysqlCon.getCon().prepareStatement(preparedSQL);
+                        PreparedStatement preparedStatement = mysqlCon.getCon().prepareStatement(preparedSQL);
                     
                         // Insert the activity information into the PreparedStatement
                         preparedStatement.setString(1, tempid);
@@ -314,6 +315,8 @@ public class Farmer implements Runnable {
                         }
             }
         }
+        // close db connection
+        mysqlCon.closeConn();
     }
 
     @Override
