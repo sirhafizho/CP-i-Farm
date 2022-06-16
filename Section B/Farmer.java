@@ -173,14 +173,14 @@ public class Farmer implements Runnable {
 
             System.out.println("Farmer " + this.getId() + " generates " + numOfActivity + " activities of random types for Farm " + farms[i]);
             // Write the farmers’ sent operations and success operations into log file
-            try {
-                FileWriter myWriter = new FileWriter("Concurrent Activity Log.txt", true);
-                myWriter.write("Farmer " + this.getId() + " generates " + numOfActivity + " activities of random types for Farm " + farms[i] + "\n");
-                myWriter.close();
-              } catch (IOException e) {
-                System.out.println("An error occurred.");
-                e.printStackTrace();
-              }
+            // try {
+            //     FileWriter myWriter = new FileWriter("Concurrent Activity Log.txt", true);
+            //     myWriter.write("Farmer " + this.getId() + " generates " + numOfActivity + " activities of random types for Farm " + farms[i] + "\n");
+            //     myWriter.close();
+            //   } catch (IOException e) {
+            //     System.out.println("An error occurred.");
+            //     e.printStackTrace();
+            //   }
               
             
             // Generate the activities performed by the farmer for the farm

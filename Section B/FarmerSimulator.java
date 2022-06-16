@@ -456,7 +456,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         timer.startTime();
 
         // Create a fixed thread pool executor
-        ExecutorService threadPool = new MyThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS,
+        ExecutorService threadPool = new MyThreadPoolExecutor(500, 500, 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<>());
         for(int i = 0; i<farmers.length; i++){
             threadPool.execute(farmers[i]);

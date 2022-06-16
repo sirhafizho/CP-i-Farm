@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.awt.Point;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -11,8 +12,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JScrollBar;
+import javax.swing.JViewport;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.text.DefaultCaret;
 
 /**
  *
@@ -27,6 +31,14 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
     private List<String> pesticideList;
     private List<String> rowList;
     private List<String> fieldList;
+
+    
+    private Boolean shouldSearch = false;
+    private int initValue = 0;
+    private int toLoad = 100;
+
+    JScrollBar sb;
+    JViewport vp;
     /**
      * Creates new form DataVisualzationFrame
      */
@@ -59,6 +71,25 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
                 visualization.mysqlCon.closeConn();
                 System.exit(0);
             }
+        });
+
+        sb = jScrollPane1.getVerticalScrollBar();
+        vp = jScrollPane1.getViewport();
+        vp.addChangeListener((l) -> {
+            if(!shouldSearch)
+                return;
+            if(sb.getValue() == sb.getMinimum())
+                System.out.println("top");
+            if(sb.getValue() +sb.getVisibleAmount() == sb.getMaximum()){
+                if(shouldSearch){
+                    System.out.println("bottom"); 
+                    initValue += toLoad;
+                    System.out.println("loading data "+initValue+" to "+(initValue+toLoad));
+                    getData();
+                }
+                
+            }
+                
         });
     
     }
@@ -347,7 +378,9 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         outputTextArea.setRows(5);
         outputTextArea.setEnabled(false);
         jScrollPane1.setViewportView(outputTextArea);
-
+        DefaultCaret caret = (DefaultCaret)outputTextArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+        
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -402,8 +435,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void displayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayButtonActionPerformed
-        
+    private void getData(){
         DataVisualization visualization = new DataVisualization();
         String farmer = farmerComboBox.getSelectedItem().toString();
         String farm = farmComboBox.getSelectedItem().toString();
@@ -416,41 +448,86 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
        if(display1.isSelected()){
-           String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarm(farm));
-           outputTextArea.setText("");
-           outputTextArea.setText(activityLog);
-       } else if(display2.isSelected()){
-           String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmer(farmer));
-           outputTextArea.setText("");
-           outputTextArea.setText(activityLog);
-       } else if(display3.isSelected()){
-           String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmType(farm, type));
-           outputTextArea.setText("");
-           outputTextArea.setText(activityLog);
-       } else if(display4.isSelected()){
+            if(initValue == 0){
+                System.out.println("setting search to true");
+                shouldSearch = true;
+            }
+           String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarm(farm, initValue, toLoad));
+           if(activityLog == "No records found\n"){
+            System.out.println("setting search to false");
+            shouldSearch = false;
+           }
+           outputTextArea.append(activityLog);
            
+           
+       } else if(display2.isSelected()){
+            if(initValue == 0){
+                System.out.println("setting search to true");
+                shouldSearch = true;
+            }
+           String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmer(farmer, initValue, toLoad));
+           
+           if(activityLog == "No records found\n"){
+            System.out.println("setting search to false");
+            shouldSearch = false;
+           }
+           outputTextArea.append(activityLog);
+       } else if(display3.isSelected()){
+            if(initValue == 0){
+                System.out.println("setting search to true");
+                shouldSearch = true;
+            }
+           String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmType(farm, type, initValue, toLoad));
+           
+           if(activityLog == "No records found\n"){
+            System.out.println("setting search to false");
+            shouldSearch = false;
+           }
+           outputTextArea.append(activityLog);
+       } else if(display4.isSelected()){
+            
            if(startDate.before(endDate)){
+                if(initValue == 0){
+                    System.out.println("setting search to true");
+                    shouldSearch = true;
+                }
                String fromDate = dateFormat.format(startDate);
                String toDate = dateFormat.format(endDate);
-               String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmTypeDate(farm, type, fromDate, toDate));
-               outputTextArea.setText("");
-               outputTextArea.setText(activityLog);
+               String activityLog = visualization.printActivityLog(visualization.displayActivityLogsFarmTypeDate(farm, type, fromDate, toDate, initValue, toLoad));
+               
+               if(activityLog == "No records found\n"){
+                System.out.println("setting search to false");
+                shouldSearch = false;
+               }
+               outputTextArea.append(activityLog);
            } else {
                outputTextArea.setText("");
                outputTextArea.setText("Invalid date choices (start date should be lower than end date)");
            }
        } else if(display5.isSelected()){
            if(startDate.before(endDate)){
+                if(initValue == 0){
+                    System.out.println("setting search to true");
+                    shouldSearch = true;
+                }
                String fromDate = dateFormat.format(startDate);
                String toDate = dateFormat.format(endDate);
-               String activityLog = visualization.printSummarizedActivityLog(visualization.displayActivityLogsFarmTypeDateFieldRow(farm, type, fromDate, toDate, field, row));
-               outputTextArea.setText("");
-               outputTextArea.setText(activityLog);
+               String activityLog = visualization.printSummarizedActivityLog(visualization.displayActivityLogsFarmTypeDateFieldRow(farm, type, fromDate, toDate, field, row, initValue, toLoad));
+               
+               if(activityLog == "No records found\n"){
+                System.out.println("setting search to false");
+                shouldSearch = false;
+               }
+               outputTextArea.append(activityLog);
            } else {
                outputTextArea.setText("");
                outputTextArea.setText("Invalid date choices (start date should be lower than end date)");
            }
        }
+    }
+
+    private void displayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayButtonActionPerformed
+        getData();
         exportOutput.setEnabled(true);
     }//GEN-LAST:event_displayButtonActionPerformed
 
@@ -464,6 +541,9 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         this.dateACalendar.setEnabled(false);
         this.dateBCalendar.setEnabled(false);
         this.displayButton.setEnabled(true);
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
     }//GEN-LAST:event_display1ActionPerformed
 
     private void display2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_display2ActionPerformed
@@ -476,6 +556,9 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         this.dateACalendar.setEnabled(false);
         this.dateBCalendar.setEnabled(false);
         this.displayButton.setEnabled(true);
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
     }//GEN-LAST:event_display2ActionPerformed
 
     private void display3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_display3ActionPerformed
@@ -488,6 +571,9 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         this.dateACalendar.setEnabled(false);
         this.dateBCalendar.setEnabled(false);
         this.displayButton.setEnabled(true);
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
     }//GEN-LAST:event_display3ActionPerformed
 
     private void rowComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rowComboBoxActionPerformed
@@ -504,6 +590,9 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         this.dateACalendar.setEnabled(true);
         this.dateBCalendar.setEnabled(true);
         this.displayButton.setEnabled(true);
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
     }//GEN-LAST:event_display4ActionPerformed
 
     private void choiceComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_choiceComboBoxActionPerformed
@@ -540,6 +629,9 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         this.dateACalendar.setEnabled(true);
         this.dateBCalendar.setEnabled(true);
         this.displayButton.setEnabled(true);
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
     }//GEN-LAST:event_display5ActionPerformed
 
     private void exportOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportOutputActionPerformed

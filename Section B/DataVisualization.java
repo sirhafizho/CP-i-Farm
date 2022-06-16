@@ -72,13 +72,14 @@ public class DataVisualization {
         }
     }
 
-    public ResultSet displayActivityLogsFarm(String farmID) {
+    public ResultSet displayActivityLogsFarm(String farmID, int from, int toLoad) {
         ResultSet rs = null;
         try {
             // Get activities based on farm id
             String sqlQuery = "SELECT * FROM processed_activities" +
                     " WHERE farmId = " + farmID +
-                    " ORDER BY date ASC";
+                    " ORDER BY date ASC"+
+                    " LIMIT "+from+", "+toLoad;
             rs = stmt.executeQuery(sqlQuery);
             // printActivityLog(rs);
         } catch (SQLException e) {
@@ -88,13 +89,14 @@ public class DataVisualization {
         return rs;
     }
 
-    public ResultSet displayActivityLogsFarmer(String farmerID) {
+    public ResultSet displayActivityLogsFarmer(String farmerID, int from, int toLoad) {
         ResultSet rs = null;
         try {
             // Get activities based on farmer id
             String sqlQuery = "SELECT * FROM processed_activities" +
                     " WHERE userId = " + farmerID +
-                    " ORDER BY date ASC";
+                    " ORDER BY date ASC"+
+                    " LIMIT "+from+", "+toLoad;
             rs = stmt.executeQuery(sqlQuery);
             // printActivityLog(rs);
         } catch (SQLException e) {
@@ -104,14 +106,15 @@ public class DataVisualization {
         return rs;
     }
 
-    public ResultSet displayActivityLogsFarmType(String farmID, String type) {
+    public ResultSet displayActivityLogsFarmType(String farmID, String type, int from, int toLoad) {
         ResultSet rs = null;
         try {
             // Get activities based on farm id & type of plant / fertilizer / pesticide
             String sqlQuery = "SELECT * FROM processed_activities" +
                     " WHERE farmId = " + farmID +
                     " AND LOWER(type) = LOWER('" + type + "')" +
-                    " ORDER BY date ASC";
+                    " ORDER BY date ASC"+
+                    " LIMIT "+from+", "+toLoad;
             rs = stmt.executeQuery(sqlQuery);
             // printActivityLog(rs);
         } catch (SQLException e) {
@@ -122,13 +125,13 @@ public class DataVisualization {
     }
 
     // This method dispalys activity logs based on the specified farmID, type of materials used, start date, and end date
-    public ResultSet displayActivityLogsFarmTypeDate(String farmID, String type, String fromDate, String toDate) {
+    public ResultSet displayActivityLogsFarmTypeDate(String farmID, String type, String fromDate, String toDate, int from, int toLoad) {
         ResultSet rs = null;
         try {
             // Get activities from database based on farm id, type of plant / fertilizer / pesticide, start date, and end date
             String sqlQuery = String.format(
-                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' ORDER BY date ASC",
-                    farmID, type, fromDate, toDate);
+                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' ORDER BY date ASC LIMIT %d, %d",
+                    farmID, type, fromDate, toDate, from, toLoad);
             rs = stmt.executeQuery(sqlQuery);
             // printActivityLog(rs);
         } catch (SQLException e) {
@@ -139,15 +142,15 @@ public class DataVisualization {
     }
 
     // This method dispalys activity logs based on the specified farmID, type of materials used, start date, end date, field number in the farm, row number in the field
-    public ResultSet displayActivityLogsFarmTypeDateFieldRow(String farmID, String type, String fromDate, String toDate, String fieldNumber, String rowNumber) {
+    public ResultSet displayActivityLogsFarmTypeDateFieldRow(String farmID, String type, String fromDate, String toDate, String fieldNumber, String rowNumber, int from, int toLoad) {
         ResultSet rs = null;
         try {
             System.out.println("Field Number "+Integer.parseInt(fieldNumber));
             System.out.println("Row Number "+Integer.parseInt(rowNumber));
             // Get activities from database based on farm id, type of plant / fertilizer / pesticide, start date, end date, field number & row number
             String sqlQuery = String.format(
-                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' AND field = %d AND row = %d ORDER BY date ASC",
-                    farmID, type, fromDate, toDate, Integer.parseInt(fieldNumber), Integer.parseInt(rowNumber));
+                    "SELECT * FROM processed_activities WHERE farmId = %s AND LOWER(type) = LOWER('%s') AND date >= '%s' AND date <= '%s' AND field = %d AND row = %d ORDER BY date ASC LIMIT %d, %d",
+                    farmID, type, fromDate, toDate, Integer.parseInt(fieldNumber), Integer.parseInt(rowNumber), from, toLoad);
             rs = stmt.executeQuery(sqlQuery);
             // printSummarizedActivityLog(rs);
         } catch (SQLException e) {
@@ -161,7 +164,7 @@ public class DataVisualization {
         String output = ""; 
         try {
             if (!rs.isBeforeFirst()) {
-                output += "No records found";
+                return "No records found\n";
             } else {
                 while (rs.next()) {
                     String action = rs.getString("action");
@@ -186,7 +189,7 @@ public class DataVisualization {
         String output = "";
         try {
             if (!rs.isBeforeFirst()) {
-                output += "No records found";
+                return "No records foundn\n";
             } else {
                 int quantitySum = 0;
                 String action = rs.getString("action");
