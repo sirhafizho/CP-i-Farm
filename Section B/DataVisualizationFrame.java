@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 import java.awt.Point;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -236,11 +238,21 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         });
 
         dateACalendar.setEnabled(false);
+        dateACalendar.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent e){
+                dateACalendarActionPerformed(e);
+            }
+        });
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Date A");
 
         dateBCalendar.setEnabled(false);
+        dateBCalendar.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent e){
+                dateBCalendarActionPerformed(e);
+            }
+        });
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Date B");
@@ -283,6 +295,11 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
         chosenTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         chosenTypeComboBox.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chosenTypeComboBox.setEnabled(false);
+        chosenTypeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chosenTypeComboBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -529,6 +546,7 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
     private void displayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayButtonActionPerformed
         getData();
         exportOutput.setEnabled(true);
+        displayButton.setEnabled(false);
     }//GEN-LAST:event_displayButtonActionPerformed
 
     private void display1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_display1ActionPerformed
@@ -577,7 +595,10 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_display3ActionPerformed
 
     private void rowComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rowComboBoxActionPerformed
-        
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
+        displayButton.setEnabled(true);
     }//GEN-LAST:event_rowComboBoxActionPerformed
 
     private void display4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_display4ActionPerformed
@@ -611,12 +632,40 @@ public class DataVisualizationFrame extends javax.swing.JFrame {
             chosenTypeComboBox.setModel(new DefaultComboBoxModel(this.pesticideList.toArray()));
             this.chosenTypeComboBox.setEnabled(true);
         }
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
+        displayButton.setEnabled(true);
             
         
     }//GEN-LAST:event_choiceComboBoxActionPerformed
 
     private void fieldComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldComboBoxActionPerformed
-        
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
+        displayButton.setEnabled(true);
+    }//GEN-LAST:event_fieldComboBoxActionPerformed
+
+    private void chosenTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldComboBoxActionPerformed
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
+        displayButton.setEnabled(true);
+    }//GEN-LAST:event_fieldComboBoxActionPerformed
+
+    private void dateACalendarActionPerformed(PropertyChangeEvent evt) {//GEN-FIRST:event_fieldComboBoxActionPerformed
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
+        displayButton.setEnabled(true);
+    }//GEN-LAST:event_fieldComboBoxActionPerformed
+
+    private void dateBCalendarActionPerformed(PropertyChangeEvent evt) {//GEN-FIRST:event_fieldComboBoxActionPerformed
+        initValue = 0;
+        outputTextArea.setText("");
+        shouldSearch = false;
+        displayButton.setEnabled(true);
     }//GEN-LAST:event_fieldComboBoxActionPerformed
 
     private void display5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_display5ActionPerformed

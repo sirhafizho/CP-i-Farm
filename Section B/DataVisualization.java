@@ -189,7 +189,7 @@ public class DataVisualization {
         String output = "";
         try {
             if (!rs.isBeforeFirst()) {
-                return "No records foundn\n";
+                return "No records found\n";
             } else {
                 int quantitySum = 0;
                 String action = rs.getString("action");
