@@ -13,14 +13,14 @@ public class DriverClass {
 
     public static void main(String[] args) {
 
-        // Check the Database and reset
-        // checkDB();
+        //Check the Database and reset
+        checkDB();
 
-        // // Initalise Farmer Simulator
-        // FarmerSimulator simulator = new FarmerSimulator();
+        // Initalise Farmer Simulator
+        FarmerSimulator simulator = new FarmerSimulator();
 
-        // // Generate Farmers
-        // Farmer[] farmers = simulator.generateFarmers(4);
+        // Generate Farmers
+        Farmer[] farmers = simulator.generateFarmers(10);
 
         // // SEQUENTIAL PART
         // createNewSeqLog();
@@ -55,11 +55,11 @@ public class DriverClass {
         frame.setVisible(true);
 
         // CONCURRENT PART
-        // try {
-        //     simulator.concurrentActivityGeneration(farmers);
-        // } catch (InterruptedException e) {
-        //     e.printStackTrace();
-        // }
+        try {
+            simulator.concurrentActivityGeneration(farmers);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
