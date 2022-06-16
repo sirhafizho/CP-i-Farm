@@ -21,7 +21,7 @@ public class DriverClass {
         FarmerSimulator simulator = new FarmerSimulator();
 
         // Generate Farmers
-        Farmer[] farmers = simulator.generateFarmers(100);
+        Farmer[] farmers = simulator.generateFarmers(1000);
 
         // // SEQUENTIAL PART
         // createNewSeqLog();
