@@ -35,6 +35,7 @@ public class JComboBoxDecorator {
 
         final JTextField textField = (JTextField) jcb.getEditor().getEditorComponent();
 
+        // to filter the dropdown list options based on user input by using event dispatch thread
         textField.addKeyListener(
             new KeyAdapter()
             {
