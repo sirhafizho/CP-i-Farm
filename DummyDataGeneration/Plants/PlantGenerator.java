@@ -20,26 +20,21 @@ public class PlantGenerator {
 
         FileReader fr = new FileReader("./DummyDataGeneration/Plants/PlantList.txt");
         Scanner inFile = new Scanner(fr);
-        while (inFile.hasNext())
-        {
+        while (inFile.hasNext()) {
             String line = inFile.nextLine();
             String[] plantsTxt = line.split(", ");
             data.addAll(Arrays.asList(plantsTxt));
         }
         inFile.close();
-        // boundIndex for select in sub list
         int numberOfElements = 100;
         List<String[]> plants = getRandomElement(data, numberOfElements);
         writer.writeAll(plants);
         writer.close();
     }
 
-    public static List<String[]>
-    getRandomElement(List<String> list, int totalItems)
-    {
+    public static List<String[]> getRandomElement(List<String> list, int totalItems) {
         Random rand = new Random();
         List<String[]> newList = new ArrayList<>();
-        // newList.add(new String[] {"id", "name", "unitType"});
         for (int i = 0; i < totalItems; i++) {
             int randomIndex = rand.nextInt(list.size());
             String[] newString = new String[] { (i+1) + "", list.get(randomIndex) + "" , "mass"};

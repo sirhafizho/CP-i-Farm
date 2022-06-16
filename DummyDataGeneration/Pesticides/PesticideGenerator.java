@@ -20,23 +20,19 @@ public class PesticideGenerator {
 
         FileReader fr = new FileReader("PesticideList.txt");
         Scanner inFile = new Scanner(fr);
-        while (inFile.hasNext())
-        {
+        while (inFile.hasNext()) {
             String line = inFile.nextLine();
             String[] pesticidesTxt = line.split(", ");
             data.addAll(Arrays.asList(pesticidesTxt));
         }
         inFile.close();
-        // boundIndex for select in sub list
         int numberOfElements = 100;
         List<String[]> pesticides = getRandomElement(data, numberOfElements);
         writer.writeAll(pesticides);
         writer.close();
     }
 
-    public static List<String[]>
-    getRandomElement(List<String> list, int totalItems)
-    {
+    public static List<String[]> getRandomElement(List<String> list, int totalItems) {
         Random rand = new Random();
         List<String[]> newList = new ArrayList<>();
         newList.add(new String[] {"id", "name", "unitType"});
