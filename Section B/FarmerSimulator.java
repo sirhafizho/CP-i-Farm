@@ -72,6 +72,12 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
     // This method generates a number of farmers
     public Farmer[] generateFarmers(int numberOfFarmers) {
 
+        // Exception Handling
+        if(numberOfFarmers < 0) {
+            System.out.println("Number of Farmers must be more than 0");
+        }
+
+
         // Create array to store generated farmer
         Farmer[] farmers = new Farmer[numberOfFarmers];
         
@@ -456,7 +462,7 @@ public class FarmerSimulator implements FarmerSimulatorInterface {
         timer.startTime();
 
         // Create a fixed thread pool executor
-        ExecutorService threadPool = new MyThreadPoolExecutor(500, 500, 0L, TimeUnit.MILLISECONDS,
+        ExecutorService threadPool = new MyThreadPoolExecutor(50, 50, 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<>());
         for(int i = 0; i<farmers.length; i++){
             threadPool.execute(farmers[i]);
