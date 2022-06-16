@@ -42,11 +42,18 @@ public class DriverClass {
         // System.out.println("\nStop Timer");
         // System.out.println("\nTime taken for dummy farmers' simulation using sequential approach: " + timer.timeTaken() + "ns (" + TimeUnit.NANOSECONDS.toMillis(timer.timeTaken()) + "ms)\n");
 
+        // CONCURRENT PART
+        try {
+            simulator.concurrentActivityGeneration(farmers);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         // //this is the data visualization section
-        // DataVisualization visualize = new DataVisualization();
+        DataVisualization visualize = new DataVisualization();
         
         // // calling the process activities method to process the activities 
-        // visualize.processActivities();
+        visualize.processActivities();
 
         //to display the frame
         DataVisualizationFrame frame = new DataVisualizationFrame();
@@ -54,12 +61,6 @@ public class DriverClass {
         // frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        // CONCURRENT PART
-        try {
-            simulator.concurrentActivityGeneration(farmers);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
     }
 
