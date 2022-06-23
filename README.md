@@ -1,4 +1,4 @@
-# Concurrent Programming i-Farm, the Organic Farm Activity Logging Application
+# Concurrent Programming i-Farm, the Organic Farm Activity Logging Application.
 
 Context:
 
